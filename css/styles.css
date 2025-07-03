@@ -1,0 +1,42 @@
+/*
+ *
+ * Autor: Julián Quesada Víquez
+ * Fecha de creación: 02/07/2025
+ * Archivo: styles.css
+ * Descripción: Archivo de estilos general para todas las páginas
+ *
+*/
+
+/* Declaraciones globales */
+
+:root {
+    --FondoPrincipal: #F5F1E6;
+    --Titulos-Acentos: #3E3E3E;
+    --Botones-Resaltes: #B85C38;
+    --Hover-Secundarios: #6F4E37;
+    --Fondo-tarjetas: #FFFFFF;
+    --Detalles-sutiles: #D3CBB8;
+}
+
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+}
+
+body{
+    font-family: 'Open Sans', sans-serif;
+}
+
+h1,h2,h3{
+    font-family: 'Playfair Display', serif;
+}
+
+/* Header */
