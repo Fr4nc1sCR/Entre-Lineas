@@ -31,12 +31,17 @@ html {
     scroll-snap-stop: always;
 }
 
-body{
-    font-family: 'Open Sans', sans-serif;
+body {
+    margin: 0; /* elimina margen por defecto */
+    padding: 2rem; /* espacio para que no quede pegado al borde */
+    font-family: 'Open Sans', sans-serif; /* o la que uses */
+    min-height: 100%;
+    background-color: var(--FondoPrincipal); /* si quieres */
+    color: var(--Titulos-Acentos);
 }
 
-h1,h2,h3{
+h1,
+h2,
+h3 {
     font-family: 'Playfair Display', serif;
 }
-
-/* Header */

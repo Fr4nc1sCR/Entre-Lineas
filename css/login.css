@@ -1,0 +1,224 @@
+/*
+ *
+ * Autor: Julián Quesada Víquez
+ * Fecha de creación: 02/07/2025
+ * Archivo: login.css
+ * Descripción: Archivo de estilos especifico para la página del Login
+ *
+*/
+
+/* Login */
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 95vh;
+    padding: 2rem;
+}
+
+.login-box {
+    background-color: var(--Fondo-tarjetas);
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 4rem;
+    max-width: 55rem;
+    width: 100%;
+    text-align: center;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    animation: fadeInUp 1s ease-out;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-box h1 {
+    font-size: 3.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    color: var(--Titulos-Acentos);
+}
+
+.icono-libro {
+    width: 30px;
+    vertical-align: middle;
+    margin-bottom: .6rem;
+}
+
+.login-box p {
+    font-size: 1.4rem;
+    color: var(--Titulos-Acentos);
+    margin-bottom: 2rem;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+    color: var(--Titulos-Acentos);
+}
+
+.input-group input {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.4rem;
+    border: 1px solid var(--Detalles-sutiles);
+    border-radius: 0.8rem;
+    background-color: #fff;
+}
+
+.input-group input:focus {
+    border-color: var(--Botones-Resaltes);
+    box-shadow: 0 0 8px rgba(184, 92, 56, 0.2);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.btn-login {
+    background-color: var(--Botones-Resaltes);
+    color: white;
+    padding: 1rem 2rem;
+    font-size: 1.6rem;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-login:hover {
+    background-color: var(--Hover-Secundarios);
+}
+
+.register-link {
+    font-size: 1.2rem;
+}
+
+.register-link p{
+    margin-bottom: 1rem;
+    margin-bottom: 0;
+}
+
+.register-link a {
+    color: var(--Botones-Resaltes);
+    text-decoration: none;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+.footer p{
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+
+/* Fondo Animado */
+
+.background-books {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/img/fondo-libros.png'); /* Asegurate de que esta ruta es correcta */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    filter: brightness(0.6); /* oscurece solo el fondo */
+    animation: spiralZoom 5s ease-in-out infinite alternate;
+    z-index: -1;
+}
+
+/* Animación para el formulario */
+
+.formulario {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.01s linear 0.4s;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    visibility: hidden;
+}
+
+.formulario.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    position: relative;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+/* Estilos personalizados para SweetAlert2 */
+
+.swal2-popup.swal-custom {
+  font-size: 1.4rem !important;
+  width: 40rem !important;
+  padding: 2.5rem !important;
+  border-radius: 1.5rem !important;
+  background-color: var(--Fondo-tarjetas) !important;
+  color: var(--Titulos-Acentos) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.swal2-title {
+  font-size: 2.4rem !important;
+  color: var(--Titulos-Acentos) !important;
+  margin-bottom: 1rem !important;
+}
+
+.swal2-html-container {
+  font-size: 1.6rem !important;
+  color: var(--Titulos-Acentos) !important;
+}
+
+.swal2-icon {
+  transform: scale(1.5);
+  margin-bottom: 1.2rem !important;
+}
+
+.swal2-confirm {
+  background-color: var(--Botones-Resaltes) !important;
+  color: #fff !important;
+  font-size: 1.4rem !important;
+  border-radius: 0.8rem !important;
+  padding: 1rem 2rem !important;
+}
+
+.swal2-confirm:hover {
+  background-color: var(--Hover-Secundarios) !important;
+}
+
+/* Animaciones */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spiralZoom {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(0.3deg);
+    }
+    100% {
+        transform: scale(1.15) rotate(0deg);
+    }
+}
