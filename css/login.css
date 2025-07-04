@@ -99,7 +99,7 @@
     font-size: 1.2rem;
 }
 
-.register-link p{
+.register-link p {
     margin-bottom: 1rem;
     margin-bottom: 0;
 }
@@ -113,7 +113,7 @@
     text-decoration: underline;
 }
 
-.footer p{
+.footer p {
     font-size: 1.1rem;
     margin-bottom: 0;
 }
@@ -123,79 +123,115 @@
 
 .background-books {
     position: fixed;
-    top: 0; left: 0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/img/fondo-libros.png'); /* Asegurate de que esta ruta es correcta */
+    background-image: url('/img/fondo-libros.png');
+    /* Asegurate de que esta ruta es correcta */
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    filter: brightness(0.6); /* oscurece solo el fondo */
-    animation: spiralZoom 5s ease-in-out infinite alternate;
+    filter: brightness(0.6);
+    /* oscurece solo el fondo */
+    animation: spiralZoom 15s ease-in-out infinite alternate;
     z-index: -1;
 }
 
 /* Animación para el formulario */
 
-.formulario {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.01s linear 0.4s;
-    pointer-events: none;
-    position: absolute;
-    top: 0;
-    left: 0;
+.page-container {
+    position: relative;
     width: 100%;
-    visibility: hidden;
+    height: auto;
+    transition: height 0.3s ease;
+    perspective: 1200px;
 }
 
-.formulario.visible {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+.form-wrapper {
     position: relative;
-    visibility: visible;
-    transition-delay: 0s;
+    width: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.8s ease-in-out;
+}
+
+.form-wrapper.flipped {
+    transform: rotateY(180deg);
+}
+
+.form-page {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    backface-visibility: hidden;
+    box-sizing: border-box;
+}
+
+.front {
+    transform: rotateY(0deg);
+    z-index: 2;
+}
+
+.back {
+    transform: rotateY(180deg);
+    z-index: 1;
+}
+
+.page-container.flipped .front {
+    transform: rotateY(-180deg);
+    z-index: 1;
+}
+
+.page-container.flipped .back {
+    transform: rotateY(0deg);
+    z-index: 2;
+}
+
+.formulario {
+    padding: 1rem;
+    box-sizing: border-box;
+    height: 100%;
 }
 
 /* Estilos personalizados para SweetAlert2 */
 
 .swal2-popup.swal-custom {
-  font-size: 1.4rem !important;
-  width: 40rem !important;
-  padding: 2.5rem !important;
-  border-radius: 1.5rem !important;
-  background-color: var(--Fondo-tarjetas) !important;
-  color: var(--Titulos-Acentos) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    font-size: 1.4rem !important;
+    width: 40rem !important;
+    padding: 2.5rem !important;
+    border-radius: 1.5rem !important;
+    background-color: var(--Fondo-tarjetas) !important;
+    color: var(--Titulos-Acentos) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
 .swal2-title {
-  font-size: 2.4rem !important;
-  color: var(--Titulos-Acentos) !important;
-  margin-bottom: 1rem !important;
+    font-size: 2.4rem !important;
+    color: var(--Titulos-Acentos) !important;
+    margin-bottom: 1rem !important;
 }
 
 .swal2-html-container {
-  font-size: 1.6rem !important;
-  color: var(--Titulos-Acentos) !important;
+    font-size: 1.6rem !important;
+    color: var(--Titulos-Acentos) !important;
 }
 
 .swal2-icon {
-  transform: scale(1.5);
-  margin-bottom: 1.2rem !important;
+    transform: scale(1.5);
+    margin-bottom: 1.2rem !important;
 }
 
 .swal2-confirm {
-  background-color: var(--Botones-Resaltes) !important;
-  color: #fff !important;
-  font-size: 1.4rem !important;
-  border-radius: 0.8rem !important;
-  padding: 1rem 2rem !important;
+    background-color: var(--Botones-Resaltes) !important;
+    color: #fff !important;
+    font-size: 1.4rem !important;
+    border-radius: 0.8rem !important;
+    padding: 1rem 2rem !important;
 }
 
 .swal2-confirm:hover {
-  background-color: var(--Hover-Secundarios) !important;
+    background-color: var(--Hover-Secundarios) !important;
 }
 
 /* Animaciones */
@@ -205,6 +241,7 @@
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -215,10 +252,44 @@
     0% {
         transform: scale(1) rotate(0deg);
     }
+
     50% {
         transform: scale(1.1) rotate(0.3deg);
     }
+
     100% {
         transform: scale(1.15) rotate(0deg);
+    }
+}
+
+/* Media Queries */
+
+/* Resolución para Tablets */
+@media (max-width: 1440px) {}
+
+/* Resolución para Celulares */
+@media (max-width: 768px) {
+    .login-box {
+        padding: 2rem 1rem 1rem 1rem;
+    }
+
+    .login-box h1 {
+        font-size: 2rem;
+    }
+
+    .icono-libro {
+        width: 20px;
+        vertical-align: middle;
+        margin-bottom: .6rem;
+    }
+
+    .login-box #form-title{
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+    }
+
+    .footer p{
+        margin-top: 1.5rem;
+        font-size: 1rem;
     }
 }

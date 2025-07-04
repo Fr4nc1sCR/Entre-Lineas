@@ -1,12 +1,20 @@
+// login-register.js
+
 const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
 const formTitle = document.getElementById('form-title');
 const toggleTextContainer = document.getElementById('toggle-text');
+const pageContainer = document.getElementById('page-container');
 
 let isRegistering = false;
 
 window.addEventListener('DOMContentLoaded', () => {
+    loginForm.closest('.form-page').classList.add('active');
     loginForm.style.display = 'block';
+
+    // Aquí llamás a la función
+    ajustarAlturaContenedor();
+
     requestAnimationFrame(() => {
         loginForm.classList.add('visible');
         document.getElementById('email').focus();
@@ -89,85 +97,77 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Limpiar el formulario
             limpiarFormularioRegistro();
-
             submitBtn.disabled = false;
             return;
         }
 
         try {
-            await register(full_name, username, email, password, confirmPassword);
-            toggleForms(new Event('click')); // Cambia al formulario de login
+            const registrado = await register(full_name, username, email, password, confirmPassword);
+            if (registrado) {
+                toggleForms(new Event('click'));
+                setTimeout(() => {
+                    document.getElementById('email').focus();
+                }, 500);
+            }
         } catch (err) {
             console.error(err);
         } finally {
             submitBtn.disabled = false;
         }
     });
+
 });
 
 function toggleForms(e) {
     e.preventDefault();
     isRegistering = !isRegistering;
 
+    const loginPage = document.querySelector('.form-page.front');
+    const registerPage = document.querySelector('.form-page.back');
+
+    // 👉 Alterna animación visual
+    pageContainer.classList.toggle('flipped');
+
+    // Actualiza título y texto
     if (isRegistering) {
-        loginForm.classList.remove('visible');
-        
-        setTimeout(() => {
-            loginForm.style.display = 'none';
-            loginForm.setAttribute('aria-hidden', 'true');
-
-            registerForm.style.display = 'block';
-            registerForm.setAttribute('aria-hidden', 'false');
-
-            // Forzar reflujo antes de añadir la clase para activar animación
-            void registerForm.offsetWidth;
-            registerForm.classList.add('visible');
-
-            document.getElementById('full-name').focus();
-        }, 400);
-
         formTitle.textContent = 'Crea tu cuenta';
+        toggleTextContainer.innerHTML = '¿Ya tienes cuenta? <a href="#" id="toggle-link">Inicia sesión</a>';
 
-        toggleTextContainer.textContent = '¿Ya tienes cuenta? ';
-        const a = document.createElement('a');
-        a.href = '#';
-        a.id = 'toggle-link';
-        a.textContent = 'Inicia sesión';
-        toggleTextContainer.appendChild(a);
-
+        loginPage.classList.remove('active');
+        registerPage.classList.add('active');
     } else {
-        registerForm.classList.remove('visible');
-        
-        setTimeout(() => {
-            registerForm.style.display = 'none';
-            registerForm.setAttribute('aria-hidden', 'true');
-
-            loginForm.style.display = 'block';
-            loginForm.setAttribute('aria-hidden', 'false');
-
-            void loginForm.offsetWidth;
-            loginForm.classList.add('visible');
-
-            document.getElementById('email').focus();
-        }, 400);
-
         formTitle.textContent = 'Inicia sesión para continuar';
+        toggleTextContainer.innerHTML = '¿No tienes cuenta? <a href="#" id="toggle-link">Regístrate</a>';
 
-        toggleTextContainer.textContent = '¿No tienes cuenta? ';
-        const a = document.createElement('a');
-        a.href = '#';
-        a.id = 'toggle-link';
-        a.textContent = 'Regístrate';
-        toggleTextContainer.appendChild(a);
+        registerPage.classList.remove('active');
+        loginPage.classList.add('active');
     }
+
+    // 👉 Ajusta altura después de la animación
+    setTimeout(ajustarAlturaContenedor, 50); // espera a que termine el flip
 }
 
-function limpiarFormularioRegistro() {
+function limpiarFormularios() {
+    // Registro
     document.getElementById("full-name").value = '';
     document.getElementById("username").value = '';
     document.getElementById("email-register").value = '';
     document.getElementById("password-register").value = '';
     document.getElementById("confirm-password").value = '';
+
+    // Login
+    document.getElementById("email").value = '';
+    document.getElementById("password").value = '';
+}
+
+function ajustarAlturaContenedor() {
+    const activeFormPage = document.querySelector('.form-page.active');
+    if (!activeFormPage || !pageContainer) return;
+
+    // Obtener altura del formulario activo
+    const altura = activeFormPage.offsetHeight;
+
+    // Asignarla al contenedor
+    pageContainer.style.height = `${altura}px`;
 }
