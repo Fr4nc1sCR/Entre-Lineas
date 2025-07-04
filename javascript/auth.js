@@ -4,6 +4,9 @@ async function login(email, password) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
+    options: {
+      emailRedirectTo: 'https://entrelineaslib.netlify.app/paginas/principal.html',
+    }
   });
 
   if (error) {
