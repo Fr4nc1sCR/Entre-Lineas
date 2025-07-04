@@ -5,6 +5,7 @@ async function login(email, password) {
     email,
     password,
     options: {
+      data: { full_name },
       emailRedirectTo: 'https://entrelineaslib.netlify.app/paginas/principal.html',
     }
   });
