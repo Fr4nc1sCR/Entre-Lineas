@@ -3,11 +3,7 @@
 async function login(email, password) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
-    password,
-    options: {
-      data: { full_name },
-      emailRedirectTo: 'https://entrelineaslib.netlify.app/paginas/principal.html',
-    }
+    password
   });
 
   if (error) {
@@ -58,7 +54,14 @@ async function register(full_name, username, email, password, confirmPassword) {
 
   try {
     // Paso 1: Crear usuario en Supabase Auth
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name }, // Se guarda en user_metadata
+        emailRedirectTo: 'https://entrelineaslib.netlify.app/paginas/principal.html'
+      }
+    });
 
     if (error) {
       Swal.fire({
