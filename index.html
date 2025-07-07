@@ -53,10 +53,45 @@
                             <div class="input-group">
                                 <label for="password-register">Contraseña</label>
                                 <input type="password" id="password-register" name="password" required>
+                                <span class="toggle-password" toggle="#password-register"
+                                    aria-label="Mostrar contraseña" role="button" tabindex="0">
+                                    <!-- Ojo abierto -->
+                                    <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                    <!-- Ojo tachado -->
+                                    <svg class="eye-closed" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" style="display:none;">
+                                        <path
+                                            d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.35 21.35 0 0 1 5-6" />
+                                        <path d="M1 1l22 22" />
+                                    </svg>
+                                </span>
                             </div>
+
                             <div class="input-group">
                                 <label for="confirm-password">Confirmar contraseña</label>
                                 <input type="password" id="confirm-password" name="confirm_password" required>
+                                <span class="toggle-password" toggle="#confirm-password" aria-label="Mostrar contraseña"
+                                    role="button" tabindex="0">
+                                    <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                    <svg class="eye-closed" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" style="display:none;">
+                                        <path
+                                            d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.35 21.35 0 0 1 5-6" />
+                                        <path d="M1 1l22 22" />
+                                    </svg>
+                                </span>
                             </div>
                             <button type="submit" class="btn-login">Registrarme</button>
                         </form>
@@ -84,6 +119,7 @@
     <script src="javascript/supabaseClient.js"></script>
     <script src="javascript/auth.js"></script>
     <script src="javascript/login-register.js"></script>
+    <script src="javascript/vista-contra.js"></script>
 
 </body>
 

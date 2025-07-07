@@ -117,6 +117,26 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // -------------- Confirmación de activación de correo --------------
+    const urlParams = new URLSearchParams(window.location.search);
+    const confirmed = urlParams.get('confirmed');
+
+    if (confirmed === 'true') {
+        Swal.fire({
+            icon: 'success',
+            title: 'Cuenta Confirmada',
+            text: 'Tu cuenta ha sido confirmada correctamente. Ya puedes iniciar sesión.',
+            customClass: {
+                popup: 'swal-custom'
+            }
+        });
+
+        // Quitar el parámetro de la URL sin recargar la página
+        const url = new URL(window.location);
+        url.searchParams.delete('confirmed');
+        window.history.replaceState({}, document.title, url.toString());
+    }
+
 });
 
 function toggleForms(e) {

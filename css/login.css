@@ -55,6 +55,7 @@
 .input-group {
     text-align: left;
     margin-bottom: 2rem;
+    position: relative;
 }
 
 .input-group label {
@@ -78,6 +79,26 @@
     box-shadow: 0 0 8px rgba(184, 92, 56, 0.2);
     outline: none;
     transition: all 0.3s ease;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-password svg {
+    margin-top: 2.5rem;
+    stroke: var(--Detalles-sutiles);
+    transition: stroke 0.3s ease;
+}
+
+.toggle-password.show svg {
+    stroke: var(--Botones-Resaltes);
 }
 
 .btn-login {
@@ -283,12 +304,12 @@
         margin-bottom: .6rem;
     }
 
-    .login-box #form-title{
+    .login-box #form-title {
         font-size: 1.4rem;
         margin-bottom: 1rem;
     }
 
-    .footer p{
+    .footer p {
         margin-top: 1.5rem;
         font-size: 1rem;
     }
