@@ -117,26 +117,72 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // -------------- Confirmación de activación de correo --------------
+    // -------------- Confirmación de activación de correo con verificación real --------------
     const urlParams = new URLSearchParams(window.location.search);
     const confirmed = urlParams.get('confirmed');
+    const email = urlParams.get('email');
 
-    if (confirmed === 'true') {
-        Swal.fire({
-            icon: 'success',
-            title: 'Cuenta Confirmada',
-            text: 'Tu cuenta ha sido confirmada correctamente. Ya puedes iniciar sesión.',
-            customClass: {
-                popup: 'swal-custom'
-            }
-        });
+    if (confirmed === 'true' && email) {
+        fetch('https://tesgrczidahfjwrniijv.supabase.co/functions/v1/check-email-verification-ts', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc2dyY3ppZGFoZmp3cm5paWp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE1MDU0NjYsImV4cCI6MjA2NzA4MTQ2Nn0.5kvXrymn7ahLu01E0hL0GTwD1LFyC5aCMMbSvecqnrA' // ¡IMPORTANTE!
+            },
+            body: JSON.stringify({ email })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message || 'No se pudo verificar el correo.',
+                        customClass: {
+                            popup: 'swal-custom'
+                        }
+                    });
+                    return;
+                }
 
-        // Quitar el parámetro de la URL sin recargar la página
-        const url = new URL(window.location);
-        url.searchParams.delete('confirmed');
-        window.history.replaceState({}, document.title, url.toString());
+                if (data.confirmado) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Cuenta ya confirmada',
+                        text: 'Este correo ya había sido verificado anteriormente.',
+                        customClass: {
+                            popup: 'swal-custom'
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Cuenta confirmada',
+                        text: 'Tu cuenta ha sido confirmada correctamente. Ya puedes iniciar sesión.',
+                        customClass: {
+                            popup: 'swal-custom'
+                        }
+                    });
+                }
+
+                // Limpiar URL
+                const url = new URL(window.location);
+                url.searchParams.delete('confirmed');
+                url.searchParams.delete('email');
+                window.history.replaceState({}, document.title, url.toString());
+            })
+            .catch(error => {
+                console.error('Error verificando correo:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Ocurrió un problema al verificar el correo.',
+                    customClass: {
+                        popup: 'swal-custom'
+                    }
+                });
+            });
     }
-
 });
 
 function toggleForms(e) {
