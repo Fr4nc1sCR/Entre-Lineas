@@ -122,19 +122,48 @@ window.addEventListener('DOMContentLoaded', () => {
     const confirmed = urlParams.get('confirmed');
 
     if (confirmed === 'true') {
-        Swal.fire({
-            icon: 'success',
-            title: 'Cuenta Confirmada',
-            text: 'Tu cuenta ha sido confirmada correctamente. Ya puedes iniciar sesión.',
-            customClass: {
-                popup: 'swal-custom'
-            }
-        });
+        const checkUserConfirmation = async () => {
+            const { data, error } = await supabase.auth.getUser();
 
-        // Quitar el parámetro de la URL sin recargar la página
-        const url = new URL(window.location);
-        url.searchParams.delete('confirmed');
-        window.history.replaceState({}, document.title, url.toString());
+            if (error || !data?.user) {
+                // No hay sesión activa, probablemente porque ya se usó el enlace
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Cuenta ya confirmada',
+                    text: 'Tu cuenta ya había sido verificada anteriormente. Puedes iniciar sesión.',
+                    customClass: {
+                        popup: 'swal-custom'
+                    }
+                });
+            } else if (data.user.email_confirmed_at) {
+                // Confirmación correcta con sesión activa
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Cuenta confirmada',
+                    text: 'Tu cuenta ha sido confirmada correctamente. Ya puedes iniciar sesión.',
+                    customClass: {
+                        popup: 'swal-custom'
+                    }
+                });
+            } else {
+                // Extra (poco probable): no está confirmada aún
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Confirmación incompleta',
+                    text: 'Hubo un problema confirmando tu cuenta. Intenta nuevamente.',
+                    customClass: {
+                        popup: 'swal-custom'
+                    }
+                });
+            }
+
+            // Limpiar la URL
+            const url = new URL(window.location);
+            url.searchParams.delete('confirmed');
+            window.history.replaceState({}, document.title, url.toString());
+        };
+
+        checkUserConfirmation();
     }
 
 });
