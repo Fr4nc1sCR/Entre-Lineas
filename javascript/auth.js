@@ -59,7 +59,7 @@ async function register(full_name, username, email, password, confirmPassword) {
       password,
       options: {
         data: { full_name }, // Se guarda en user_metadata
-        emailRedirectTo: `https://entrelineaslib.netlify.app/index.html?confirmed=true&email=${encodeURIComponent(email)}`
+        emailRedirectTo: `https://entrelineaslib.netlify.app/index.html?confirmed=true`
       }
     });
 
