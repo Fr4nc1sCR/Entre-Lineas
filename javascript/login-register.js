@@ -6,13 +6,10 @@ const formTitle = document.getElementById('form-title');
 const toggleTextContainer = document.getElementById('toggle-text');
 const pageContainer = document.getElementById('page-container');
 
-let isRegistering = false;
-
 window.addEventListener('DOMContentLoaded', () => {
     loginForm.closest('.form-page').classList.add('active');
     loginForm.style.display = 'block';
 
-    // Aquí llamás a la función
     ajustarAlturaContenedor();
 
     requestAnimationFrame(() => {
@@ -20,11 +17,12 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('email').focus();
     });
 
-    // Listener delegado para toggle
+    // Listener para los links de login/register (delegado)
     toggleTextContainer.addEventListener('click', function (e) {
         if (e.target && e.target.id === 'toggle-link') {
             e.preventDefault();
-            toggleForms(e);
+            const mode = e.target.dataset.mode; // 'login' o 'register'
+            toggleForms(mode);
         }
     });
 
@@ -42,13 +40,10 @@ window.addEventListener('DOMContentLoaded', () => {
                 icon: 'warning',
                 title: 'Campos incompletos',
                 text: 'Por favor ingresa correo y contraseña.',
-                customClass: {
-                    popup: 'swal-custom'
-                }
+                customClass: { popup: 'swal-custom' }
             });
 
-            // Limpiar el formulario
-            limpiarFormularioRegistro();
+            limpiarFormularios();
 
             submitBtn.disabled = false;
             return;
@@ -59,14 +54,11 @@ window.addEventListener('DOMContentLoaded', () => {
             Swal.fire({
                 icon: 'success',
                 title: 'Inicio de sesión exitoso',
-                customClass: {
-                    popup: 'swal-custom'
-                }
+                customClass: { popup: 'swal-custom' }
+            }).then(() => {
+                // Redirige cuando el usuario cierra el alert
+                window.location.href = 'paginas/principal.html';
             });
-
-            // Limpiar el formulario
-            limpiarFormularioRegistro();
-
             console.log('Usuario logueado:', data);
         } catch (error) {
             console.error(error);
@@ -92,12 +84,10 @@ window.addEventListener('DOMContentLoaded', () => {
                 icon: 'warning',
                 title: 'Campos incompletos',
                 text: 'Por favor completa todos los campos.',
-                customClass: {
-                    popup: 'swal-custom'
-                }
+                customClass: { popup: 'swal-custom' }
             });
 
-            limpiarFormularioRegistro();
+            limpiarFormularios();
             submitBtn.disabled = false;
             return;
         }
@@ -105,7 +95,7 @@ window.addEventListener('DOMContentLoaded', () => {
         try {
             const registrado = await register(full_name, username, email, password, confirmPassword);
             if (registrado) {
-                toggleForms(new Event('click'));
+                toggleForms('login');
                 setTimeout(() => {
                     document.getElementById('email').focus();
                 }, 500);
@@ -117,7 +107,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // -------------- Confirmación de activación de correo --------------
+    // Confirmación de activación de correo
     const urlParams = new URLSearchParams(window.location.search);
     const confirmed = urlParams.get('confirmed');
 
@@ -126,38 +116,28 @@ window.addEventListener('DOMContentLoaded', () => {
             const { data, error } = await supabase.auth.getUser();
 
             if (error || !data?.user) {
-                // No hay sesión activa, probablemente porque ya se usó el enlace
                 Swal.fire({
                     icon: 'info',
                     title: 'Cuenta ya confirmada',
                     text: 'Tu cuenta ya había sido verificada anteriormente. Puedes iniciar sesión.',
-                    customClass: {
-                        popup: 'swal-custom'
-                    }
+                    customClass: { popup: 'swal-custom' }
                 });
             } else if (data.user.email_confirmed_at) {
-                // Confirmación correcta con sesión activa
                 Swal.fire({
                     icon: 'success',
                     title: 'Cuenta confirmada',
                     text: 'Tu cuenta ha sido confirmada correctamente. Ya puedes iniciar sesión.',
-                    customClass: {
-                        popup: 'swal-custom'
-                    }
+                    customClass: { popup: 'swal-custom' }
                 });
             } else {
-                // Extra (poco probable): no está confirmada aún
                 Swal.fire({
                     icon: 'warning',
                     title: 'Confirmación incompleta',
                     text: 'Hubo un problema confirmando tu cuenta. Intenta nuevamente.',
-                    customClass: {
-                        popup: 'swal-custom'
-                    }
+                    customClass: { popup: 'swal-custom' }
                 });
             }
 
-            // Limpiar la URL
             const url = new URL(window.location);
             url.searchParams.delete('confirmed');
             window.history.replaceState({}, document.title, url.toString());
@@ -166,35 +146,102 @@ window.addEventListener('DOMContentLoaded', () => {
         checkUserConfirmation();
     }
 
+    // Link "¿Olvidaste tu contraseña?"
+    document.getElementById('forgot-password-link').addEventListener('click', function (e) {
+        e.preventDefault();
+        toggleForms('forgot');
+    });
+
+    // Enviar enlace de recuperación
+    document.getElementById('send-reset').addEventListener('click', async function () {
+        const emailInput = document.getElementById('email-reset');
+        const email = emailInput.value.trim();
+
+        if (!email) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Correo requerido',
+                text: 'Por favor ingresa tu correo para recuperar tu contraseña.',
+                customClass: { popup: 'swal-custom' }
+            });
+            return;
+        }
+
+        try {
+            const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: 'https://entrelineaslib.netlify.app/paginas/cambiar-contrasena.html'
+            });
+
+            if (error) throw error;
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Enlace enviado',
+                text: 'Revisa tu correo electrónico para restablecer tu contraseña.',
+                customClass: { popup: 'swal-custom' }
+            });
+
+            emailInput.value = '';
+
+        } catch (err) {
+            console.error(err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: err.message || 'No se pudo enviar el enlace. Intenta más tarde.',
+                customClass: { popup: 'swal-custom' }
+            });
+        }
+    });
+
+
+    // Link "¿Recordaste tu contraseña?"
+    document.getElementById('back-to-login').addEventListener('click', function (e) {
+        e.preventDefault();
+        toggleForms('login');
+    });
 });
 
-function toggleForms(e) {
-    e.preventDefault();
-    isRegistering = !isRegistering;
-
+function toggleForms(mode) {
     const loginPage = document.querySelector('.form-page.front');
     const registerPage = document.querySelector('.form-page.back');
+    const forgotForm = document.getElementById('forgot-password-form');
 
-    // 👉 Alterna animación visual
-    pageContainer.classList.toggle('flipped');
+    // Ocultar todos
+    loginPage.style.display = 'none';
+    registerPage.style.display = 'none';
+    forgotForm.style.display = 'none';
 
-    // Actualiza título y texto
-    if (isRegistering) {
-        formTitle.textContent = 'Crea tu cuenta';
-        toggleTextContainer.innerHTML = '¿Ya tienes cuenta? <a href="#" id="toggle-link">Inicia sesión</a>';
+    loginPage.classList.remove('active');
+    registerPage.classList.remove('active');
+    pageContainer.classList.remove('flipped');
 
-        loginPage.classList.remove('active');
-        registerPage.classList.add('active');
-    } else {
-        formTitle.textContent = 'Inicia sesión para continuar';
-        toggleTextContainer.innerHTML = '¿No tienes cuenta? <a href="#" id="toggle-link">Regístrate</a>';
-
-        registerPage.classList.remove('active');
+    if (mode === 'login') {
+        loginPage.style.display = 'block';
         loginPage.classList.add('active');
+        formTitle.textContent = 'Inicia sesión para continuar';
+        toggleTextContainer.innerHTML = '¿No tienes cuenta? <a href="#" id="toggle-link" data-mode="register">Regístrate</a>';
+        document.querySelector('.register-link').style.display = 'block';
+        document.querySelector('.forgot-password-link').style.display = 'block';
+        document.getElementById('email').focus();
+    } else if (mode === 'register') {
+        registerPage.style.display = 'block';
+        registerPage.classList.add('active');
+        pageContainer.classList.add('flipped');
+        formTitle.textContent = 'Crea tu cuenta';
+        toggleTextContainer.innerHTML = '¿Ya tienes cuenta? <a href="#" id="toggle-link" data-mode="login">Inicia sesión</a>';
+        document.querySelector('.register-link').style.display = 'block';
+        document.querySelector('.forgot-password-link').style.display = 'block';
+        document.getElementById('full-name').focus();
+    } else if (mode === 'forgot') {
+        forgotForm.style.display = 'block';
+        formTitle.textContent = 'Recuperar contraseña';
+        document.querySelector('.register-link').style.display = 'none';
+        document.querySelector('.forgot-password-link').style.display = 'none';
+        document.getElementById('email-reset').focus();
     }
 
-    // 👉 Ajusta altura después de la animación
-    setTimeout(ajustarAlturaContenedor, 50); // espera a que termine el flip
+    setTimeout(ajustarAlturaContenedor, 50);
 }
 
 function limpiarFormularios() {
@@ -211,12 +258,34 @@ function limpiarFormularios() {
 }
 
 function ajustarAlturaContenedor() {
+    let altura = 0;
+
+    const pageContainer = document.getElementById('page-container');
     const activeFormPage = document.querySelector('.form-page.active');
-    if (!activeFormPage || !pageContainer) return;
+    const forgotForm = document.getElementById('forgot-password-form');
 
-    // Obtener altura del formulario activo
-    const altura = activeFormPage.offsetHeight;
+    function getVisibleHeight(element) {
+        if (!element) return 0;
 
-    // Asignarla al contenedor
-    pageContainer.style.height = `${altura}px`;
+        // Si el elemento está oculto con display:none, lo mostramos temporalmente para medir
+        const estiloOriginal = element.style.display;
+        if (estiloOriginal === 'none' || window.getComputedStyle(element).display === 'none') {
+            element.style.display = 'block';
+            const height = element.offsetHeight;
+            element.style.display = estiloOriginal;
+            return height;
+        } else {
+            return element.offsetHeight;
+        }
+    }
+
+    if (activeFormPage && window.getComputedStyle(activeFormPage).display !== 'none') {
+        altura = getVisibleHeight(activeFormPage);
+    } else if (forgotForm && window.getComputedStyle(forgotForm).display !== 'none') {
+        altura = getVisibleHeight(forgotForm);
+    }
+
+    if (pageContainer) {
+        pageContainer.style.height = `${altura}px`;
+    }
 }

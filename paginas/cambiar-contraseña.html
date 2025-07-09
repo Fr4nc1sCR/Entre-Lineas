@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Restablecer contraseña - Entre Líneas</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/cambiar-contrasena.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Open+Sans&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <main class="login-container">
+    <section class="login-box">
+      <h1><img src="/img/books.png" alt="Icono libro" class="icono-libro">Restablecer contraseña</h1>
+      <p id="form-title">Ingresa tu nueva contraseña</p>
+
+      <form id="reset-password-form" class="formulario">
+        <div class="input-group">
+          <label for="new-password">Nueva contraseña</label>
+          <input type="password" id="new-password" required />
+        </div>
+        <div class="input-group">
+          <label for="confirm-password">Confirmar contraseña</label>
+          <input type="password" id="confirm-password" required />
+        </div>
+        <button type="submit" class="btn-login">Actualizar contraseña</button>
+      </form>
+
+      <div class="footer" style="margin-top:2rem;">
+        <p>&copy; 2025 Julián Quesada Víquez. Todos los derechos reservados.</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="background-books"></div>
+
+  <!-- Librerías -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/javascript/supabaseClient.js"></script>
+
+  <!-- Script de restablecimiento -->
+  <script src="/javascript/recuperar.js"></script>
+</body>
+</html>

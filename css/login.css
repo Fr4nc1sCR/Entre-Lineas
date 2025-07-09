@@ -134,6 +134,103 @@
     text-decoration: underline;
 }
 
+.forgot-password-link {
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.forgot-password-link p {
+    margin-bottom: 0;
+}
+
+.forgot-password-link a {
+    color: var(--Botones-Resaltes);
+    text-decoration: none;
+}
+
+.forgot-password-link a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#forgot-password-form .input-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    /* espacio entre label e input */
+    margin-bottom: 2rem;
+}
+
+#forgot-password-form .input-row label {
+    font-size: 1.4rem;
+    color: var(--Titulos-Acentos);
+    text-align: right;
+    /* alineado a la derecha para quedar pegado al input */
+    margin-bottom: 0;
+    /* quitamos margen para que no baje */
+}
+
+#forgot-password-form .input-row input[type="email"] {
+    flex: 1; /* ocupa el resto del espacio */
+    padding: 1rem;
+    font-size: 1.4rem;
+    border: 1px solid var(--Detalles-sutiles);
+    border-radius: 0.8rem;
+    background-color: #fff;
+    margin-bottom: 0;
+    /* quitamos margen para que quede alineado */
+    box-sizing: border-box;
+}
+
+
+#forgot-password-form .input-row input[type="email"]:focus {
+    border-color: var(--Botones-Resaltes);
+    box-shadow: 0 0 8px rgba(184, 92, 56, 0.2);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#forgot-password-form button.btn-login {
+    width: 100%;
+    font-size: 1.6rem;
+    padding: 1rem 0;
+    border-radius: 1rem;
+    cursor: pointer;
+    background-color: var(--Botones-Resaltes);
+    color: #fff;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+#forgot-password-form button.btn-login:hover {
+    background-color: var(--Hover-Secundarios);
+}
+
+.back-to-login-link {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    /* Igual que el margen que tenías inline */
+    color: var(--Titulos-Acentos);
+    text-align: center;
+    /* Si quieres centrarlo */
+}
+
+.back-to-login-link p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.back-to-login-link a {
+    color: var(--Botones-Resaltes);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.back-to-login-link a:hover {
+    text-decoration: underline;
+}
+
 .footer p {
     font-size: 1.1rem;
     margin-bottom: 0;
@@ -291,7 +388,7 @@
 /* Resolución para Celulares */
 @media (max-width: 768px) {
     .login-box {
-        padding: 2rem 1rem 1rem 1rem;
+        padding: 2rem;
     }
 
     .login-box h1 {
@@ -307,6 +404,10 @@
     .login-box #form-title {
         font-size: 1.4rem;
         margin-bottom: 1rem;
+    }
+
+    #forgot-password-form .input-row label {
+        font-size: 1.4rem;
     }
 
     .footer p {

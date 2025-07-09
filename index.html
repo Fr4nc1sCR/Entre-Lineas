@@ -97,10 +97,27 @@
                         </form>
                     </div>
                 </div>
+
+                <!-- Formulario oculto inicialmente -->
+                <div id="forgot-password-form" style="display:none; margin-top:1rem;">
+                    <div class="input-row">
+                        <label for="email-reset">Correo electrónico:</label>
+                        <input type="email" id="email-reset" placeholder="ejemplo@correo.com" />
+                    </div>
+                    <button id="send-reset" class="btn-login">Enviar enlace</button>
+                    <div class="back-to-login-link">
+                        <p>¿Recordaste tu contraseña? <a href="#" id="back-to-login">Iniciar sesión</a></p>
+                    </div>
+                </div>
             </div>
 
             <div class="register-link">
-                <p id="toggle-text">¿No tienes cuenta? <a href="#" id="toggle-link">Regístrate</a></p>
+                <p id="toggle-text">¿No tienes cuenta? <a href="#" id="toggle-link" data-mode="register">Regístrate</a>
+                </p>
+            </div>
+
+            <div class="forgot-password-link">
+                <p>¿Olvidaste tu contraseña? <a href="#" id="forgot-password-link">Recuperarla</a></p>
             </div>
 
             <div class="footer">
@@ -115,7 +132,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Luego tus archivos, en este orden -->
+    <!-- Luego el resto de archivos -->
     <script src="javascript/supabaseClient.js"></script>
     <script src="javascript/auth.js"></script>
     <script src="javascript/login-register.js"></script>
