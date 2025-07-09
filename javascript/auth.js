@@ -129,6 +129,8 @@ async function register(full_name, username, email, password, confirmPassword) {
       customClass: {
         popup: 'swal-custom'
       }
+    }).then(() => {
+      window.location.href = '/index.html';
     });
 
     // Limpiar el formulario
