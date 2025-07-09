@@ -11,10 +11,10 @@ async function login(email, password) {
     let mensaje = error.message;
 
     // Opcional: mensajes más amigables según el error
-    if (mensaje.includes("Invalid login credentials")) {
+    if (mensaje.includes("Email not confirmed")) {
+      mensaje = 'Debes confirmar tu correo antes de iniciar sesión';
+    } else if (mensaje.includes("Invalid login credentials")) {
       mensaje = 'La contraseña es incorrecta.';
-    } else if (mensaje.includes("Email not confirmed")) {
-      mensaje = 'Debes confirmar tu correo antes de iniciar sesión.';
     }
 
     Swal.fire({
