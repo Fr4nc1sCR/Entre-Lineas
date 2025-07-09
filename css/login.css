@@ -312,46 +312,6 @@
     height: 100%;
 }
 
-/* Estilos personalizados para SweetAlert2 */
-
-.swal2-popup.swal-custom {
-    font-size: 1.4rem !important;
-    width: 40rem !important;
-    padding: 2.5rem !important;
-    border-radius: 1.5rem !important;
-    background-color: var(--Fondo-tarjetas) !important;
-    color: var(--Titulos-Acentos) !important;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-}
-
-.swal2-title {
-    font-size: 2.4rem !important;
-    color: var(--Titulos-Acentos) !important;
-    margin-bottom: 1rem !important;
-}
-
-.swal2-html-container {
-    font-size: 1.6rem !important;
-    color: var(--Titulos-Acentos) !important;
-}
-
-.swal2-icon {
-    transform: scale(1.5);
-    margin-bottom: 1.2rem !important;
-}
-
-.swal2-confirm {
-    background-color: var(--Botones-Resaltes) !important;
-    color: #fff !important;
-    font-size: 1.4rem !important;
-    border-radius: 0.8rem !important;
-    padding: 1rem 2rem !important;
-}
-
-.swal2-confirm:hover {
-    background-color: var(--Hover-Secundarios) !important;
-}
-
 /* Animaciones */
 
 @keyframes fadeInUp {
