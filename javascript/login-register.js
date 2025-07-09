@@ -169,7 +169,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         try {
             const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: 'https://entrelineaslib.netlify.app/paginas/cambiar-contrase%C3%B1a.html'
+                redirectTo: 'paginas/cambiar-contraseña.html'
             });
 
             if (error) throw error;
@@ -179,6 +179,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 title: 'Enlace enviado',
                 text: 'Revisa tu correo electrónico para restablecer tu contraseña.',
                 customClass: { popup: 'swal-custom' }
+            }).then(() => {
+                window.location.href = '/index.html';
             });
 
             emailInput.value = '';

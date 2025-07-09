@@ -35,7 +35,7 @@ form.addEventListener('submit', async (e) => {
             text: 'Ahora puedes iniciar sesión con tu nueva contraseña.',
             customClass: { popup: 'swal-custom' }
         }).then(() => {
-            window.location.href = 'https://entrelineaslib.netlify.app';
+            window.location.href = '/index.html';
         });
     } catch (err) {
         console.error(err);
