@@ -1,69 +1,32 @@
 // Auth.js
 
 async function login(email, password) {
-  try {
-    // Primero, verificar si el correo existe en la base de datos
-    const { data: userExists, error: userLookupError } = await supabase
-      .from('users')
-      .select('id')
-      .eq('email', email)
-      .maybeSingle();
+  // Paso 1: intentar iniciar sesión
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
 
-    if (!userExists) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Correo no registrado',
-        text: 'El correo ingresado no está registrado.',
-        customClass: { popup: 'swal-custom' }
-      });
-      throw new Error("Correo no registrado");
+  if (error) {
+    let mensaje = error.message;
+
+    if (mensaje.includes("Email not confirmed")) {
+      mensaje = 'Debes confirmar tu correo antes de iniciar sesión.';
+    } else if (mensaje.includes("Invalid login credentials")) {
+      mensaje = 'Correo o contraseña incorrectos.';
     }
 
-    // Segundo, intentar login con el correo y la contraseña
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
+    Swal.fire({
+      icon: 'error',
+      title: 'Error al iniciar sesión',
+      text: mensaje,
+      customClass: {
+        popup: 'swal-custom'
+      }
     });
 
-    if (error) {
-      if (error.message.includes("Email not confirmed")) {
-        Swal.fire({
-          icon: 'info',
-          title: 'Correo no confirmado',
-          text: 'Debes confirmar tu correo antes de iniciar sesión.',
-          customClass: { popup: 'swal-custom' }
-        });
-        throw error;
-      }
-
-      if (error.message.includes("Invalid login credentials")) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Contraseña incorrecta',
-          text: 'La contraseña ingresada es incorrecta.',
-          customClass: { popup: 'swal-custom' }
-        });
-        throw error;
-      }
-
-      // Otros errores
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al iniciar sesión',
-        text: error.message,
-        customClass: { popup: 'swal-custom' }
-      });
-      throw error;
-    }
-
-    // Todo salió bien
-    return data;
-
-  } catch (err) {
-    console.error('Error en login:', err.message);
-    throw err;
+    throw error;
   }
-}
 
 // Variable para bloquear registro mientras se procesa
 let registeringInProgress = false;
