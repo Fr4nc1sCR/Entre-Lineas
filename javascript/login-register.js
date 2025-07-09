@@ -188,6 +188,9 @@ window.addEventListener('DOMContentLoaded', () => {
                     text: 'El correo ingresado no está registrado.',
                     customClass: { popup: 'swal-custom' }
                 });
+
+                document.getElementById("email").value = '';
+                
                 return;
             }
 
