@@ -1,27 +1,16 @@
 // Auth.js
 
 async function login(email, password) {
-  // Paso 1: Intentar iniciar sesión con Supabase Auth
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password
   });
 
   if (error) {
-    let mensaje = error.message;
-
-    // Opcional: mensajes más amigables según el error
-    if (mensaje.includes("Email not confirmed")) {
-      mensaje = 'Debes confirmar tu correo antes de iniciar sesión';
-    } else if (mensaje.includes("Invalid login credentials")) {
-      mensaje = 'La contraseña es incorrecta.';
-    }
-
     Swal.fire({
       icon: 'error',
       title: 'Error al iniciar sesión',
       text: error.message,
-      text: mensaje,
       customClass: {
         popup: 'swal-custom'
       }
