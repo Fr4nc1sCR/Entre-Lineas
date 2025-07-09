@@ -1,27 +1,7 @@
 // Auth.js
 
 async function login(email, password) {
-  // Paso 1: Verificar si el usuario existe en la base de datos de Supabase
-  const { data: userExists, error: userError } = await supabase
-    .from('users')
-    .select('id')
-    .eq('email', email)
-    .maybeSingle(); // <- para que no lance error si no existe
-
-  if (!userExists) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Usuario no encontrado',
-      text: 'El correo ingresado no está registrado.',
-      customClass: {
-        popup: 'swal-custom'
-      }
-    });
-
-    throw new Error('Usuario no registrado');
-  }
-
-  // Paso 2: Intentar iniciar sesión con Supabase Auth
+  // Paso 1: Intentar iniciar sesión con Supabase Auth
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password
