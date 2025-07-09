@@ -168,6 +168,30 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
+            // Verificar si el correo existe en la tabla users
+            const { data: users, error: selectError } = await supabase
+                .from('users')
+                .select('email')
+                .eq('email', email)
+                .limit(1)
+                .maybeSingle();
+
+            if (selectError) {
+                throw selectError;
+            }
+
+            if (!users) {
+                // Si no se encontró el correo, muestra advertencia y no envía el reset
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Correo no encontrado',
+                    text: 'El correo ingresado no está registrado.',
+                    customClass: { popup: 'swal-custom' }
+                });
+                return;
+            }
+
+            // Si el correo existe, enviar el enlace de recuperación
             const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
                 redirectTo: 'https://entrelineaslib.netlify.app/paginas/cambiar-contrase%C3%B1a.html'
             });
@@ -195,7 +219,6 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
-
 
     // Link "¿Recordaste tu contraseña?"
     document.getElementById('back-to-login').addEventListener('click', function (e) {
