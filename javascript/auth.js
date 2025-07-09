@@ -7,17 +7,25 @@ async function login(email, password) {
   });
 
   if (error) {
+
+    let mensaje = error.message
+
+    if (mensaje.includes('Email not confirmed')) {
+      mensaje = 'Debes confirmar tu correo antes de iniciar sesión';
+    }
+
     Swal.fire({
       icon: 'error',
       title: 'Error al iniciar sesión',
       text: error.message,
+      text: mensaje,
       customClass: {
         popup: 'swal-custom'
       }
+    }).then(() => {
+      // Redirige cuando el usuario cierra el alert
+      window.location.href = '/index.html';
     });
-
-    // Limpiar el formulario
-    limpiarFormularioRegistro();
 
     throw error;
   }
