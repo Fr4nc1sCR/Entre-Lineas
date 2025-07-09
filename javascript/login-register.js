@@ -169,7 +169,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         try {
             const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: 'https://entrelineaslib.netlify.app/paginas/cambiar-contrasena.html'
+                redirectTo: 'https://entrelineaslib.netlify.app/paginas/cambiar-contrase%C3%B1a.html'
             });
 
             if (error) throw error;
