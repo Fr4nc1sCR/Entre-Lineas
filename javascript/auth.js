@@ -2,18 +2,17 @@
 
 async function login(email, password) {
   try {
-    // 1. Intentamos iniciar sesión normalmente
+    // 1. Intentar login con Supabase Auth
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
     });
 
-    // 2. Si hay error, verificamos el mensaje para saber qué hacer
+    // 2. Manejo de errores de login
     if (error) {
       const mensajeOriginal = error.message;
 
       if (mensajeOriginal.includes("Email not confirmed")) {
-        // El correo existe, pero no se ha confirmado
         Swal.fire({
           icon: 'info',
           title: 'Correo no confirmado',
@@ -25,35 +24,44 @@ async function login(email, password) {
       }
 
       if (mensajeOriginal.includes("Invalid login credentials")) {
-        // Como no podemos saber si es correo o contraseña, simulamos:
-        // Verificamos si el correo existe en TU tabla `users`
+        // Si la contraseña está mal, verificamos si el correo existe en Supabase Auth
+        const { data: userCheck, error: userError } = await supabase.auth.signInWithPassword({
+          email,
+          password: "fakepassword" // Contraseña falsa para provocar error
+        });
 
-        const { data: existe, error: errorExiste } = await supabase
-          .from('users')
-          .select('id')
-          .eq('email', email)
-          .maybeSingle();
+        if (userError && userError.message.includes("Invalid login credentials")) {
+          // Si vuelve a decir "Invalid login credentials", es posible que el correo exista
+          // Vamos a revisar si está en tu tabla `users`
+          const { data: existe, error: lookupError } = await supabase
+            .from('users')
+            .select('id')
+            .eq('email', email)
+            .maybeSingle();
 
-        if (!existe) {
-          Swal.fire({
-            icon: 'warning',
-            title: 'Correo no registrado',
-            text: 'El correo ingresado no está registrado.',
-            customClass: { popup: 'swal-custom' }
-          });
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Contraseña incorrecta',
-            text: 'La contraseña ingresada es incorrecta.',
-            customClass: { popup: 'swal-custom' }
-          });
+          if (existe) {
+            // El correo existe, entonces fue la contraseña
+            Swal.fire({
+              icon: 'error',
+              title: 'Contraseña incorrecta',
+              text: 'La contraseña ingresada es incorrecta.',
+              customClass: { popup: 'swal-custom' }
+            });
+          } else {
+            // El correo no existe del todo
+            Swal.fire({
+              icon: 'warning',
+              title: 'Correo no registrado',
+              text: 'El correo ingresado no está registrado.',
+              customClass: { popup: 'swal-custom' }
+            });
+          }
+
+          throw error;
         }
-
-        throw error;
       }
 
-      // Otro error inesperado
+      // Otro error desconocido
       Swal.fire({
         icon: 'error',
         title: 'Error al iniciar sesión',
@@ -64,11 +72,12 @@ async function login(email, password) {
       throw error;
     }
 
-    // Si no hay error, login exitoso
+    // 3. Login exitoso
     return data;
-  } catch (e) {
-    console.error('Error en login:', e.message);
-    throw e;
+
+  } catch (err) {
+    console.error('Error en login:', err.message);
+    throw err;
   }
 }
 
