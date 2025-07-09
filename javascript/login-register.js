@@ -187,10 +187,12 @@ window.addEventListener('DOMContentLoaded', () => {
                     title: 'Correo no encontrado',
                     text: 'El correo ingresado no está registrado.',
                     customClass: { popup: 'swal-custom' }
+                }).then(() => {
+                    window.location.href = '/index.html';
                 });
 
                 document.getElementById("email").value = '';
-                
+
                 return;
             }
 
