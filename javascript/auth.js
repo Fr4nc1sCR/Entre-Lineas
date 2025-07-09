@@ -2,77 +2,61 @@
 
 async function login(email, password) {
   try {
-    // 1. Intentar login con Supabase Auth
+    // Primero, verificar si el correo existe en la base de datos
+    const { data: userExists, error: userLookupError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (!userExists) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Correo no registrado',
+        text: 'El correo ingresado no está registrado.',
+        customClass: { popup: 'swal-custom' }
+      });
+      throw new Error("Correo no registrado");
+    }
+
+    // Segundo, intentar login con el correo y la contraseña
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
     });
 
-    // 2. Manejo de errores de login
     if (error) {
-      const mensajeOriginal = error.message;
-
-      if (mensajeOriginal.includes("Email not confirmed")) {
+      if (error.message.includes("Email not confirmed")) {
         Swal.fire({
           icon: 'info',
           title: 'Correo no confirmado',
           text: 'Debes confirmar tu correo antes de iniciar sesión.',
           customClass: { popup: 'swal-custom' }
         });
-
         throw error;
       }
 
-      if (mensajeOriginal.includes("Invalid login credentials")) {
-        // Si la contraseña está mal, verificamos si el correo existe en Supabase Auth
-        const { data: userCheck, error: userError } = await supabase.auth.signInWithPassword({
-          email,
-          password: "fakepassword" // Contraseña falsa para provocar error
+      if (error.message.includes("Invalid login credentials")) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Contraseña incorrecta',
+          text: 'La contraseña ingresada es incorrecta.',
+          customClass: { popup: 'swal-custom' }
         });
-
-        if (userError && userError.message.includes("Invalid login credentials")) {
-          // Si vuelve a decir "Invalid login credentials", es posible que el correo exista
-          // Vamos a revisar si está en tu tabla `users`
-          const { data: existe, error: lookupError } = await supabase
-            .from('users')
-            .select('id')
-            .eq('email', email)
-            .maybeSingle();
-
-          if (existe) {
-            // El correo existe, entonces fue la contraseña
-            Swal.fire({
-              icon: 'error',
-              title: 'Contraseña incorrecta',
-              text: 'La contraseña ingresada es incorrecta.',
-              customClass: { popup: 'swal-custom' }
-            });
-          } else {
-            // El correo no existe del todo
-            Swal.fire({
-              icon: 'warning',
-              title: 'Correo no registrado',
-              text: 'El correo ingresado no está registrado.',
-              customClass: { popup: 'swal-custom' }
-            });
-          }
-
-          throw error;
-        }
+        throw error;
       }
 
-      // Otro error desconocido
+      // Otros errores
       Swal.fire({
         icon: 'error',
         title: 'Error al iniciar sesión',
-        text: mensajeOriginal,
+        text: error.message,
         customClass: { popup: 'swal-custom' }
       });
-
       throw error;
     }
 
-    // 3. Login exitoso
+    // Todo salió bien
     return data;
 
   } catch (err) {
