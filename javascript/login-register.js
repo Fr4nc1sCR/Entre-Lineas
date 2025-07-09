@@ -168,40 +168,30 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            // Verificar si el correo existe en la tabla users
-            const { data: users, error: selectError } = await supabase
-                .from('users')
-                .select('email')
-                .eq('email', email)
-                .limit(1)
-                .maybeSingle();
-
-            if (selectError) {
-                throw selectError;
-            }
-
-            if (!users) {
-                // Si no se encontró el correo, muestra advertencia y no envía el reset
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Correo no encontrado',
-                    text: 'El correo ingresado no está registrado.',
-                    customClass: { popup: 'swal-custom' }
-                }).then(() => {
-                    window.location.href = '/index.html';
-                });
-
-                document.getElementById("email").value = '';
-
-                return;
-            }
-
-            // Si el correo existe, enviar el enlace de recuperación
-            const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+            const { error } = await supabase.auth.resetPasswordForEmail(email, {
                 redirectTo: 'https://entrelineaslib.netlify.app/paginas/cambiar-contrase%C3%B1a.html'
             });
 
-            if (error) throw error;
+            if (error) {
+                if (error.message.includes("User not found")) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Correo no encontrado',
+                        text: 'El correo ingresado no está registrado.',
+                        customClass: { popup: 'swal-custom' }
+                    });
+                } else if (error.message.includes("Email not confirmed")) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Correo no confirmado',
+                        text: 'Debes confirmar tu correo desde el enlace que se envió al registrarte.',
+                        customClass: { popup: 'swal-custom' }
+                    });
+                } else {
+                    throw error;
+                }
+                return;
+            }
 
             Swal.fire({
                 icon: 'success',
@@ -224,6 +214,7 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
 
     // Link "¿Recordaste tu contraseña?"
     document.getElementById('back-to-login').addEventListener('click', function (e) {
