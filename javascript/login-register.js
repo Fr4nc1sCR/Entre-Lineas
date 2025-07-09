@@ -33,7 +33,7 @@ window.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = true;
 
         const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
+        const password = document.getElementById('login-password').value;
 
         if (!email || !password) {
             Swal.fire({
@@ -244,7 +244,7 @@ function toggleForms(mode) {
         toggleTextContainer.innerHTML = '¿No tienes cuenta? <a href="#" id="toggle-link" data-mode="register">Regístrate</a>';
         document.querySelector('.register-link').style.display = 'block';
         document.querySelector('.forgot-password-link').style.display = 'block';
-        document.getElementById('email').focus();
+        document.getElementById('email')
     } else if (mode === 'register') {
         registerPage.style.display = 'block';
         registerPage.classList.add('active');
@@ -253,13 +253,13 @@ function toggleForms(mode) {
         toggleTextContainer.innerHTML = '¿Ya tienes cuenta? <a href="#" id="toggle-link" data-mode="login">Inicia sesión</a>';
         document.querySelector('.register-link').style.display = 'block';
         document.querySelector('.forgot-password-link').style.display = 'block';
-        document.getElementById('full-name').focus();
+        document.getElementById('full-name')
     } else if (mode === 'forgot') {
         forgotForm.style.display = 'block';
         formTitle.textContent = 'Recuperar contraseña';
         document.querySelector('.register-link').style.display = 'none';
         document.querySelector('.forgot-password-link').style.display = 'none';
-        document.getElementById('email-reset').focus();
+        document.getElementById('email-reset')
     }
 
     setTimeout(ajustarAlturaContenedor, 50);

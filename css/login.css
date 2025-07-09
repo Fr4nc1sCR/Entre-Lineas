@@ -81,26 +81,6 @@
     transition: all 0.3s ease;
 }
 
-.toggle-password {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
-
-.toggle-password svg {
-    margin-top: 2.5rem;
-    stroke: var(--Detalles-sutiles);
-    transition: stroke 0.3s ease;
-}
-
-.toggle-password.show svg {
-    stroke: var(--Botones-Resaltes);
-}
-
 .btn-login {
     background-color: var(--Botones-Resaltes);
     color: white;

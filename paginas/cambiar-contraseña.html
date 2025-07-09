@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Restablecer contraseña - Entre Líneas</title>
-  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/styles.css"/>
   <link rel="stylesheet" href="/css/cambiar-contrasena.css">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Open+Sans&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Open+Sans&display=swap"
+    rel="stylesheet" />
 </head>
+
 <body>
   <main class="login-container">
     <section class="login-box">
@@ -18,10 +21,40 @@
         <div class="input-group">
           <label for="new-password">Nueva contraseña</label>
           <input type="password" id="new-password" required />
+          <span class="toggle-password" toggle="#new-password" aria-label="Mostrar contraseña" role="button"
+            tabindex="0">
+            <!-- Ojo abierto -->
+            <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#555"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            <!-- Ojo tachado -->
+            <svg class="eye-closed" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#555"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+              <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.35 21.35 0 0 1 5-6" />
+              <path d="M1 1l22 22" />
+            </svg>
+          </span>
         </div>
         <div class="input-group">
           <label for="confirm-password">Confirmar contraseña</label>
           <input type="password" id="confirm-password" required />
+          <span class="toggle-password" toggle="#confirm-password" aria-label="Mostrar contraseña" role="button"
+            tabindex="0">
+            <!-- Ojo abierto -->
+            <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#555"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            <!-- Ojo tachado -->
+            <svg class="eye-closed" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#555"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+              <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.35 21.35 0 0 1 5-6" />
+              <path d="M1 1l22 22" />
+            </svg>
+          </span>
         </div>
         <button type="submit" class="btn-login">Actualizar contraseña</button>
       </form>
@@ -41,5 +74,9 @@
 
   <!-- Script de restablecimiento -->
   <script src="/javascript/recuperar.js"></script>
+  
+  <!-- Script de toggle password -->
+  <script src="/javascript/vista-contra.js"></script>
 </body>
+
 </html>

@@ -85,3 +85,26 @@ h3 {
 .swal2-confirm:hover {
     background-color: var(--Hover-Secundarios) !important;
 }
+
+/* Toggle password */
+
+.toggle-password {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-password .eye-open {
+    margin-top: 2.5rem;
+    stroke: var(--Detalles-sutiles);
+    transition: stroke 0.3s ease;
+}
+
+.toggle-password .eye-closed {
+    margin-top: 2.5rem;
+    stroke: var(--Botones-Resaltes);
+}
