@@ -31,6 +31,10 @@
   margin-bottom: 2rem;
 }
 
+.sidebar-header h2{
+  font-size: 2rem;
+}
+
 #sidebar-toggle {
   font-size: 2.2rem;
   background: none;
@@ -243,7 +247,7 @@
 
 .libro-card img {
   width: 100%;
-  height: 220px;
+  height: auto;
   object-fit: cover;
   border-radius: 1.2rem;
   margin-bottom: 1.5rem;
@@ -258,12 +262,14 @@
   font-size: 1.7rem;
   margin-bottom: 0.4rem;
   transition: color 0.3s ease;
+  text-align: center;
 }
 
 .libro-card .info p {
   font-size: 1.4rem;
   color: var(--Detalles-sutiles);
   transition: color 0.3s ease;
+  text-align: center;
 }
 
 /* Footer */
@@ -377,4 +383,84 @@ body.dark-theme .libro-card p {
 
 body.dark-theme .footer {
   color: #bbb;
+}
+
+/* Modal Preview */
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  padding-top: 60px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  transition: opacity 0.3s ease;
+}
+
+.modal-content {
+  background-color: var(--Fondo-tarjetas);
+  margin: auto;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  color: var(--Titulos-Acentos);
+  font-size: 1.2rem;
+}
+
+.modal-content .modal-titulo{
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+.modal-content img {
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.close-btn {
+  color: var(--Botones-Resaltes);
+  float: right;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #ff8c42;
+}
+
+.btn-carrito {
+  background-color: var(--Botones-Resaltes);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-carrito:hover {
+  background-color: #ff7a2a;
+  transform: scale(1.05);
+}
+
+.dark-theme .btn-carrito {
+  background-color: #ff8c42;
+  color: #121212;
+}
+
+/* Para no hacer scroll a la hora de abrir el modal */
+
+.no-scroll {
+  overflow: hidden;
 }

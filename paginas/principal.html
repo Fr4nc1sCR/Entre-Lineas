@@ -56,28 +56,7 @@
 
                 <section class="destacados">
                     <h3>Libros Recomendados</h3>
-                    <div class="libros-grid">
-                        <article class="libro-card">
-                            <img src="/img/libro1.jpg" alt="Libro 1" />
-                            <div class="info">
-                                <h4>El Nombre del Viento</h4>
-                                <p>Patrick Rothfuss</p>
-                            </div>
-                        </article>
-                        <article class="libro-card">
-                            <img src="/img/libro2.jpg" alt="Libro 2" />
-                            <div class="info">
-                                <h4>Rayuela</h4>
-                                <p>Julio Cortázar</p>
-                            </div>
-                        </article>
-                        <article class="libro-card">
-                            <img src="/img/libro3.jpg" alt="Libro 3" />
-                            <div class="info">
-                                <h4>1984</h4>
-                                <p>George Orwell</p>
-                            </div>
-                        </article>
+                    <div class="libros-grid" id="libros-grid">
                     </div>
                 </section>
             </main>
@@ -88,11 +67,32 @@
         </div>
     </div>
 
+    <!-- Modal Preview -->
+    <div id="modal-libro" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="cerrar-modal">&times;</span>
+            <img id="modal-portada" src="" alt="Portada del libro" />
+            <h2 id="modal-titulo" class="modal-titulo"></h2>
+            <p><strong>Autor:</strong> <span id="modal-autor"></span></p>
+            <p><strong>Editorial:</strong> <span id="modal-editorial"></span></p>
+            <p><strong>ISBN:</strong> <span id="modal-isbn"></span></p>
+            <p><strong>Idioma:</strong> <span id="modal-idioma"></span></p>
+            <p><strong>Publicado:</strong> <span id="modal-fecha"></span></p>
+            <p><strong>Descripción:</strong></p>
+            <p id="modal-descripcion"></p>
+            <p><strong>Precio:</strong> ₡<span id="modal-precio"></span></p>
+            <p><strong>Stock disponible:</strong> <span id="modal-stock"></span></p>
+            <div style="text-align: center; margin-top: 2rem;">
+                <button id="btn-agregar-carrito" class="btn-carrito" data-libro-id="">Agregar al carrito</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/javascript/supabaseClient.js" defer></script>
     <script src="/javascript/principal.js" defer></script>
-
-
+    <script src="/javascript/carrito.js"></script>
 </body>
 
 </html>
