@@ -1,23 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entre Lineas - Julián Quesada Víquez</title>
-    <link rel="stylesheet" href="../css/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Open+Sans&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bienvenido a Entre Líneas</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/principal.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display&display=swap"
+        rel="stylesheet" />
 </head>
+
 <body>
-    <header class="header">
-        
-    </header>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Menú</h2>
+                <button id="sidebar-toggle" aria-label="Toggle sidebar">&#9776;</button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Mis Libros</a></li>
+                    <li><a href="#">Cuenta</a></li>
+                    <li><button id="logout-btn">Cerrar sesión</button></li>
+                </ul>
+            </nav>
+            <div class="theme-toggle-container">
+                <span class="theme-label">Modo oscuro</span>
+                <label class="switch">
+                    <input type="checkbox" id="theme-toggle" aria-label="Cambiar tema claro / oscuro" />
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </aside>
 
-    <main>
+        <!-- Main content -->
+        <div class="main-wrapper">
+            <header class="header">
+                <div class="logo">
+                    <img src="/img/books.png" alt="Logo Entre Líneas" />
+                    <h1>Entre Líneas</h1>
+                </div>
+                <div class="user-greeting" id="user-greeting">
+                    Hola, <strong id="user-name"></strong> 👋
+                </div>
+            </header>
 
-    </main>
+            <main class="main-content">
+                <section class="bienvenida">
+                    <h2>¡Bienvenido de vuelta!</h2>
+                    <p>Explora nuestra colección y sumérgete entre líneas.</p>
+                </section>
 
-    <footer>
-        <p>&copy; 2025 Julián Quesada Víquez. Todos los derechos reservados.</p>
-    </footer>
+                <section class="destacados">
+                    <h3>Libros Recomendados</h3>
+                    <div class="libros-grid">
+                        <article class="libro-card">
+                            <img src="/img/libro1.jpg" alt="Libro 1" />
+                            <div class="info">
+                                <h4>El Nombre del Viento</h4>
+                                <p>Patrick Rothfuss</p>
+                            </div>
+                        </article>
+                        <article class="libro-card">
+                            <img src="/img/libro2.jpg" alt="Libro 2" />
+                            <div class="info">
+                                <h4>Rayuela</h4>
+                                <p>Julio Cortázar</p>
+                            </div>
+                        </article>
+                        <article class="libro-card">
+                            <img src="/img/libro3.jpg" alt="Libro 3" />
+                            <div class="info">
+                                <h4>1984</h4>
+                                <p>George Orwell</p>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+            </main>
+
+            <footer class="footer">
+                <p>&copy; 2025 Entre Líneas. Todos los derechos reservados.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/javascript/supabaseClient.js" defer></script>
+    <script src="/javascript/principal.js" defer></script>
+
+
 </body>
+
 </html>

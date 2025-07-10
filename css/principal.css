@@ -1,0 +1,380 @@
+/* 
+ * Autor: Julián Quesada Víquez 
+ * Archivo: principal.css 
+ * Descripción: Estilos modernos para la vista principal luego del login 
+*/
+
+/* Contenedor general */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--FondoPrincipal);
+  color: var(--Titulos-Acentos);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  background: var(--Fondo-tarjetas);
+  padding: 2rem 1.5rem;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+#sidebar-toggle {
+  font-size: 2.2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--Titulos-Acentos);
+  transition: color 0.3s ease;
+}
+
+#sidebar-toggle:hover {
+  color: var(--Botones-Resaltes);
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.sidebar-nav li {
+  margin-bottom: 1.6rem;
+}
+
+.sidebar-nav a,
+#logout-btn {
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: var(--Titulos-Acentos);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem 0;
+  width: 100%;
+  text-align: left;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: 0.5rem;
+}
+
+.sidebar-nav a:hover,
+#logout-btn:hover {
+  color: var(--Botones-Resaltes);
+  background: var(--Detalles-sutiles);
+}
+
+/* Toggle modo oscuro */
+
+.theme-toggle-container {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--Detalles-sutiles);
+  font-size: 1.3rem;
+}
+
+.theme-label {
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+/* Switch visual para modo oscuro */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider (la parte visual del switch) */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--Detalles-sutiles);
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: var(--Botones-Resaltes);
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* Cuando el checkbox está activado */
+.switch input:checked + .slider {
+  background-color: #4d4d4d;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(24px);
+  background-color: #ff8c42;
+}
+
+/* Main wrapper */
+.main-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 3rem;
+  overflow-x: hidden;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255 255 255 / 0.7);
+  backdrop-filter: blur(6px);
+  padding: 1.5rem 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  margin-bottom: 3rem;
+  animation: fadeInDown 0.8s ease-out;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo img {
+  width: 40px;
+}
+
+.logo h1 {
+  font-size: 2.6rem;
+  color: var(--Titulos-Acentos);
+  transition: color 0.3s ease;
+}
+
+.user-greeting {
+  font-size: 1.8rem;
+  color: var(--Botones-Resaltes);
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+/* Main content */
+.bienvenida {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.bienvenida h2 {
+  font-size: 3.2rem;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.bienvenida p {
+  font-size: 1.8rem;
+  color: var(--Detalles-sutiles);
+  animation: fadeInUp 1s ease-out;
+  transition: color 0.3s ease;
+}
+
+.destacados h3 {
+  font-size: 2.4rem;
+  margin-bottom: 3rem;
+  text-align: center;
+  color: var(--Titulos-Acentos);
+  transition: color 0.3s ease;
+}
+
+.libros-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+  gap: 3rem;
+}
+
+.libro-card {
+  background-color: var(--Fondo-tarjetas);
+  padding: 2rem;
+  border-radius: 1.8rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: 
+    background-color 0.3s ease, 
+    color 0.3s ease, 
+    box-shadow 0.4s ease, 
+    transform 0.4s ease;
+  cursor: pointer;
+  perspective: 600px;
+}
+
+.libro-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.15);
+}
+
+.libro-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 1.2rem;
+  margin-bottom: 1.5rem;
+  transition: filter 0.3s ease;
+}
+
+.libro-card:hover img {
+  filter: brightness(1.1);
+}
+
+.libro-card .info h4 {
+  font-size: 1.7rem;
+  margin-bottom: 0.4rem;
+  transition: color 0.3s ease;
+}
+
+.libro-card .info p {
+  font-size: 1.4rem;
+  color: var(--Detalles-sutiles);
+  transition: color 0.3s ease;
+}
+
+/* Footer */
+.footer {
+  margin-top: 6rem;
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--Detalles-sutiles);
+  animation: fadeInUp 1.5s ease-out;
+  padding-bottom: 2rem;
+  transition: color 0.3s ease;
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Sidebar plegable (oculto en móvil y toggle) */
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 1000;
+    transform: translateX(-110%);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .main-wrapper {
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* Estilo Dark Mode */
+
+/* Estilos modo oscuro */
+body.dark-theme, 
+.app-container.dark-theme {
+  background-color: #121212;
+  color: #E0E0E0;
+}
+
+body.dark-theme .sidebar {
+  background-color: #1E1E1E;
+  box-shadow: 2px 0 10px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .sidebar-nav a,
+body.dark-theme #logout-btn,
+body.dark-theme .theme-label {
+  color: #E0E0E0;
+}
+
+body.dark-theme .sidebar-nav a:hover,
+body.dark-theme #logout-btn:hover {
+  color: #ff8c42;
+  background: rgba(255, 140, 66, 0.15);
+}
+
+body.dark-theme .header {
+  background: rgba(20, 20, 20, 0.8);
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.05);
+  color: #E0E0E0;
+}
+
+body.dark-theme .logo h1 {
+  color: #E0E0E0;
+}
+
+body.dark-theme .user-greeting {
+  color: #ff8c42;
+}
+
+body.dark-theme .libro-card {
+  background-color: #1E1E1E;
+  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.06);
+}
+
+body.dark-theme .libro-card:hover {
+  box-shadow: 0 16px 35px rgba(255, 140, 66, 0.3);
+}
+
+body.dark-theme .libro-card p {
+  color: #bbb;
+}
+
+body.dark-theme .footer {
+  color: #bbb;
+}
