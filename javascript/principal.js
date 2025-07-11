@@ -1,3 +1,5 @@
+// Principal.js
+
 document.addEventListener("DOMContentLoaded", async () => {
   const supabase = window.supabase;
 
@@ -12,6 +14,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const user = session.user;
   const fullName = user.user_metadata?.full_name || user.email || "Lector";
   document.getElementById("user-name").textContent = fullName;
+
+  // Mostrar contador de carrito al cargar
+  await actualizarContadorCarrito();
 
   // Logout
   const logoutBtn = document.getElementById("logout-btn");
@@ -95,6 +100,40 @@ async function cargarLibros() {
   });
 
   aplicarEfectoHover();
+}
+
+async function actualizarContadorCarrito() {
+  const supabase = window.supabase;
+  const contador = document.getElementById("contador-carrito");
+
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      contador.textContent = "0";
+      return;
+    }
+
+    const userId = session.user.id;
+
+    // Obtener todos los libros en el carrito del usuario
+    const { data: carrito, error } = await supabase
+      .from("carrito")
+      .select("cantidad")
+      .eq("user_id", userId);
+
+    if (error) {
+      console.error("Error al obtener el carrito:", error.message);
+      contador.textContent = "0";
+      return;
+    }
+
+    // Sumar cantidades de todos los libros
+    const total = carrito.reduce((sum, item) => sum + (item.cantidad || 0), 0);
+    contador.textContent = total;
+  } catch (err) {
+    console.error("Error general al contar el carrito:", err.message);
+    document.getElementById("contador-carrito").textContent = "0";
+  }
 }
 
 function aplicarEfectoHover() {
@@ -193,5 +232,8 @@ document.addEventListener("click", async (e) => {
 
     document.getElementById("modal-libro").style.display = "none";
     document.body.classList.remove("no-scroll");
+
+    // Actualiza el contador del carrito
+    await actualizarContadorCarrito();
   }
 });

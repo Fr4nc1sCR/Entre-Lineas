@@ -1,0 +1,95 @@
+.carrito-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: var(--FondoPrincipal);
+  color: var(--Titulos-A);
+  font-family: 'Open Sans', sans-serif;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.carrito-container h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.carrito-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.carrito-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: opacity 0.3s ease, height 0.3s ease, margin 0.3s ease;
+  overflow: hidden;
+}
+
+.carrito-item.fade-out {
+    opacity: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.carrito-item img {
+  width: 80px;
+  height: auto;
+  border-radius: 5px;
+}
+
+.carrito-info {
+  flex: 1;
+}
+
+.carrito-controles {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.carrito-controles button {
+  padding: 0.3rem 0.6rem;
+  font-weight: bold;
+  border: none;
+  background-color: #444;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.resumen-carrito {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.resumen-carrito button {
+  margin: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-volver{
+    background-color: #0787ff;
+    color: white;
+}
+
+.btn-vaciar {
+  background-color: crimson;
+  color: white;
+}
+
+.btn-comprar {
+  background-color: green;
+  color: white;
+}

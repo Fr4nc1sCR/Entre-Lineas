@@ -194,6 +194,44 @@
   transition: color 0.3s ease;
 }
 
+/* Icono de carrito en el header */
+.carrito-icono {
+  position: relative;
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.carrito-icono a {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.icono-carrito {
+  width: 32px;
+  height: 32px;
+  filter: var(--icono-filtro, invert(0));
+  transition: transform 0.3s ease;
+}
+
+.icono-carrito:hover {
+  transform: scale(1.1);
+}
+
+/* Contador de libros en el carrito */
+#contador-carrito {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: crimson;
+  color: white;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
 /* Main content */
 .bienvenida {
   text-align: center;
