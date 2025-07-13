@@ -237,3 +237,19 @@ document.addEventListener("click", async (e) => {
     await actualizarContadorCarrito();
   }
 });
+
+/* Abrir el menu modo movil */
+
+document.getElementById("abrir-menu").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.add("open");
+});
+
+// También puedes cerrarlo al hacer clic fuera del sidebar (opcional)
+document.addEventListener("click", (e) => {
+  const sidebar = document.getElementById("sidebar");
+  const abrirBtn = document.getElementById("abrir-menu");
+
+  if (!sidebar.contains(e.target) && !abrirBtn.contains(e.target)) {
+    sidebar.classList.remove("open");
+  }
+});

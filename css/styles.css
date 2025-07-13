@@ -86,6 +86,26 @@ h3 {
     background-color: var(--Hover-Secundarios) !important;
 }
 
+/* Modo oscuro adicional para SweetAlert2 (mejor contraste y coherencia visual) */
+body.dark-theme .swal2-popup.swal-custom {
+  background-color: #1e1e1e !important;
+  color: #e0e0e0 !important;
+}
+
+body.dark-theme .swal2-title,
+body.dark-theme .swal2-html-container {
+  color: #e0e0e0 !important;
+}
+
+body.dark-theme .swal2-confirm {
+  background-color: #ff8c42 !important;
+  color: #121212 !important;
+}
+
+body.dark-theme .swal2-confirm:hover {
+  background-color: #ffa25d !important;
+}
+
 /* Toggle password */
 
 .toggle-password {
@@ -107,4 +127,30 @@ h3 {
 .toggle-password .eye-closed {
     margin-top: 2.5rem;
     stroke: var(--Botones-Resaltes);
+}
+
+@media (max-width: 768px) {
+  .swal2-popup.swal-custom {
+    width: 90% !important; /* Usa el 90% del ancho de la pantalla */
+    font-size: 1.2rem !important;
+    padding: 2rem !important;
+  }
+
+  .swal2-title {
+    font-size: 2rem !important;
+  }
+
+  .swal2-html-container {
+    font-size: 1.4rem !important;
+  }
+
+  .swal2-icon {
+    transform: scale(1.2);
+    margin-bottom: 1rem !important;
+  }
+
+  .swal2-confirm {
+    font-size: 1.2rem !important;
+    padding: 0.8rem 1.6rem !important;
+  }
 }
