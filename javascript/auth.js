@@ -12,7 +12,7 @@ async function login(email, password) {
 
     if (mensaje.includes('Email not confirmed')) {
       mensaje = 'Debes confirmar tu correo antes de iniciar sesión';
-    } else if(mensaje.includes('Invalid login credentials')){
+    } else if (mensaje.includes('Invalid login credentials')) {
       mensaje = 'Correo no registrado o contraseña incorrecta';
     }
 
@@ -54,9 +54,6 @@ async function register(full_name, username, email, password, confirmPassword) {
       }
     });
 
-    // Limpiar el formulario
-    limpiarFormularioRegistro();
-
     registeringInProgress = false;
     return;
   }
@@ -73,17 +70,22 @@ async function register(full_name, username, email, password, confirmPassword) {
     });
 
     if (error) {
+
+      let mensaje = error.message;
+
+      if (mensaje.includes(`Password should be at least 12 characters. Password should contain at least one character of each: abcdefghijklmnopqrstuvwxyz, ABCDEFGHIJKLMNOPQRSTUVWXYZ, 0123456789, !@#$%^&*()_+-=[]{};':"|<>?,./\`~.`)) {
+        mensaje = 'La contraseña debe tener al menos 12 caracteres y contener letras mayúsculas, minúsculas, números y símbolos.';
+      }
+
+
       Swal.fire({
         icon: 'error',
         title: 'Error al registrarse',
-        text: error.message,
+        text: mensaje,
         customClass: {
           popup: 'swal-custom'
         }
       });
-
-      // Limpiar el formulario
-      limpiarFormularioRegistro();
 
       return;
     }
@@ -113,17 +115,23 @@ async function register(full_name, username, email, password, confirmPassword) {
       });
 
       if (insertError) {
+
+        let mensaje = insertError.message;
+
+        if (mensaje.includes('duplicate key value violates unique constraint "users_username_key"')) {
+          mensaje = 'Ya existe un usuario con este username, cámbialo para continuar';
+        } else if (mensaje.includes('duplicate key value violates unique constraint "users_email_key"')) {
+          mensaje = 'Ya existe un usuario con este correo registrado, cámbialo para continuar';
+        }
+
         Swal.fire({
           icon: 'error',
           title: 'Error al guardar en la base de datos',
-          text: insertError.message,
+          text: mensaje,
           customClass: {
             popup: 'swal-custom'
           }
         });
-
-        // Limpiar el formulario
-        limpiarFormularioRegistro();
 
         return;
       }

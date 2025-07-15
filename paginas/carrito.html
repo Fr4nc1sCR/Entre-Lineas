@@ -8,7 +8,8 @@
   <link rel="stylesheet" href="/css/styles.css" />
   <link rel="stylesheet" href="/css/carrito.css" />
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="..." crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="..." crossorigin="anonymous" />
 </head>
 
 <body>
@@ -21,14 +22,16 @@
 
     <div class="resumen-carrito">
       <p>Total a pagar: ₡<span id="total-carrito">0</span></p>
+      <p id="monto-usd" style="margin-top: 10px; font-weight: bold;"></p>
       <div class="botones-carrito">
         <button id="btn-volver" class="btn-volver">Seguir comprando</button>
         <button id="btn-vaciar" class="btn-vaciar">Vaciar carrito</button>
-        <button id="btn-comprar" class="btn-comprar">Proceder a pagar</button>
+        <div id="paypal-button-container" class="paypal-button-container"></div>
       </div>
     </div>
   </div>
 
+  <script src="https://www.paypal.com/sdk/js?client-id=AbU5fOSyUJ1m7kyj5lFaa_rD0o8C0pHtZltOmx93Qoq5N4cUjnxPuwLyHJaP4Rc-YTjQALnSMo-sq9Ak&currency=USD"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/javascript/supabaseClient.js"></script>

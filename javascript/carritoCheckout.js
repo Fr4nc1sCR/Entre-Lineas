@@ -2,6 +2,7 @@ const supabase = window.supabase;
 let userId = null;
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Validar sesión
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) {
     window.location.href = "/index.html";
@@ -11,10 +12,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   userId = session.user.id;
   await cargarCarrito(userId);
 
+  // Botón para volver a la página principal
   document.getElementById('btn-volver').addEventListener("click", () => {
     window.location.href = '/paginas/principal.html';
   });
 
+  // Botón para vaciar el carrito
   document.getElementById("btn-vaciar").addEventListener("click", async () => {
     const { error } = await supabase
       .from("carrito")
@@ -33,16 +36,92 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  document.getElementById("btn-comprar").addEventListener("click", () => {
-    Swal.fire({
-      icon: 'info',
-      title: '¡Gracias!',
-      text: 'Redirigiendo a método de pago...',
-      customClass: { popup: 'swal-custom' }
-    });
-  });
+  // Renderizar botón PayPal directamente al cargar la página
+  paypal.Buttons({
+    createOrder: (data, actions) => {
+      const totalColones = parseFloat(document.getElementById("total-carrito").textContent);
+      const tipoCambio = 540; // Actualiza con el tipo de cambio real
+      const totalUSD = totalColones / tipoCambio;
+
+      if (totalUSD <= 0 || isNaN(totalUSD)) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Carrito vacío',
+          text: 'No hay productos en el carrito para pagar.',
+          customClass: { popup: 'swal-custom' }
+        });
+        // Rechazar la creación del pedido para evitar error en PayPal
+        return Promise.reject("Carrito vacío");
+      }
+
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: totalUSD.toFixed(2),
+            currency_code: 'USD'
+          },
+          description: 'Compra de libros - Entre Líneas'
+        }]
+      });
+    },
+    onApprove: async (data, actions) => {
+      const order = await actions.order.capture();
+
+      // Obtener carrito para guardar la compra
+      const { data: carrito, error } = await supabase
+        .from("carrito")
+        .select("libro_id, cantidad")
+        .eq("user_id", userId);
+
+      if (error) {
+        console.error("Error al obtener carrito:", error);
+        return;
+      }
+
+      // Insertar cada item en la tabla compras
+      for (const item of carrito) {
+        await supabase.from("compras").insert({
+          user_id: userId,
+          libro_id: item.libro_id,
+          cantidad: item.cantidad,
+          fecha: new Date().toISOString()
+        });
+      }
+
+      // Vaciar carrito
+      await supabase.from("carrito").delete().eq("user_id", userId);
+
+      Swal.fire({
+        icon: 'success',
+        title: '¡Pago exitoso!',
+        text: 'Tu compra se ha realizado correctamente.',
+        customClass: { popup: 'swal-custom' }
+      }).then(() => {
+        window.location.href = '/paginas/mis-libros.html';
+      });
+    },
+    onCancel: () => {
+      Swal.fire({
+        icon: 'info',
+        title: 'Pago cancelado',
+        text: 'No se realizó el pago.',
+        customClass: { popup: 'swal-custom' }
+      });
+    },
+    onError: (err) => {
+      console.error("PayPal error:", err);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error en el pago',
+        text: 'Ocurrió un error al procesar el pago.',
+        customClass: { popup: 'swal-custom' }
+      });
+    }
+  }).render('#paypal-button-container');
+
 });
 
+// Función para cargar el carrito y mostrar los productos
 async function cargarCarrito(userId) {
   const lista = document.getElementById("carrito-lista");
   const totalTexto = document.getElementById("total-carrito");
@@ -90,7 +169,6 @@ async function cargarCarrito(userId) {
       </div>
     `;
 
-    // Agregar eventos
     div.querySelector(".btn-menos").addEventListener("click", () => modificarCantidad(item.id, item.cantidad - 1));
     div.querySelector(".btn-mas").addEventListener("click", () => modificarCantidad(item.id, item.cantidad + 1));
     div.querySelector(".btn-eliminar").addEventListener("click", () => eliminarItem(item.id));
@@ -101,6 +179,7 @@ async function cargarCarrito(userId) {
   totalTexto.textContent = total.toFixed(2);
 }
 
+// Modificar cantidad de un ítem en el carrito
 async function modificarCantidad(id, nuevaCantidad) {
   if (nuevaCantidad < 1) {
     await eliminarItem(id);
@@ -117,6 +196,7 @@ async function modificarCantidad(id, nuevaCantidad) {
   }
 }
 
+// Eliminar ítem del carrito
 async function eliminarItem(id) {
   const itemDiv = document.querySelector(`[data-id="${id}"]`);
   if (itemDiv) {
@@ -130,6 +210,6 @@ async function eliminarItem(id) {
       if (!error) {
         await cargarCarrito(userId);
       }
-    }, 300); // espera la animación
+    }, 300); // espera la animación para que se vea el fade-out
   }
 }

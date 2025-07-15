@@ -182,6 +182,10 @@
     margin-bottom: 1rem;
   }
 
+  .paypal-button-container{
+    margin-top: 1rem;
+  }
+
 }
 
 @media (max-width: 480px) {
