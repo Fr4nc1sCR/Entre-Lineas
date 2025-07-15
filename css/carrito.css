@@ -1,3 +1,12 @@
+/*
+ *
+ * Autor: Julián Quesada Víquez
+ * Fecha de creación: 02/07/2025
+ * Archivo: carrito.css
+ * Descripción: Archivo de estilos para la página del carrito
+ *
+*/
+
 .carrito-container {
   max-width: 800px;
   margin: 2rem auto;
@@ -170,6 +179,11 @@
   color: white;
 }
 
+.paypal-button-container {
+  width: 25rem;
+  margin: 0 auto;
+}
+
 @media (max-width: 600px) {
   .carrito-item {
     grid-template-columns: 1fr;
@@ -182,10 +196,10 @@
     margin-bottom: 1rem;
   }
 
-  .paypal-button-container{
+  .paypal-button-container {
     margin-top: 1rem;
+    width: auto;
   }
-
 }
 
 @media (max-width: 480px) {
