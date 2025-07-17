@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bienvenido a Entre Líneas</title>
     <link rel="stylesheet" href="/css/styles.css" />
-    <link rel="stylesheet" href="/css/principal.css" />
+    <link rel="stylesheet" href="/css/cuenta.css" />
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display&display=swap"
         rel="stylesheet" />
 </head>
@@ -20,7 +20,7 @@
             </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="/index.html">Inicio</a></li>
+                    <li><a href="/paginas/principal.html">Inicio</a></li>
                     <li><a href="#">Mis Libros</a></li>
                     <li><a href="#">Cuenta</a></li>
                     <li><button id="logout-btn">Cerrar sesión</button></li>
@@ -57,7 +57,46 @@
             </header>
 
             <main>
-                
+                <section class="bienvenida">
+                    <h2>¡Ajustes de Cuenta!</h2>
+                    <p>Administra tu información personal, revisa tus pedidos y personaliza tu experiencia en Entre
+                        Líneas.</p>
+                </section>
+
+                <section class="main-content">
+                    <!-- Información del usuario -->
+                    <div class="cuenta-seccion">
+                        <h3>Información Personal</h3>
+                        <form id="form-perfil">
+                            <label for="nombre">Nombre completo:</label>
+                            <input type="text" id="nombre" name="nombre" required placeholder="Nombre Completo del usuario"/>
+
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" name="username" placeholder="Username del usuario" required>
+
+                            <label for="email">Correo electrónico:</label>
+                            <input type="email" id="email" name="email" disabled />
+
+                            <button type="submit" class="btn-carrito">Guardar cambios</button>
+                        </form>
+                    </div>
+
+                    <!-- Pedidos realizados -->
+                    <div class="cuenta-seccion">
+                        <h3>Mis Pedidos</h3>
+                        <div id="lista-pedidos">
+                            <p>Cargando pedidos...</p>
+                        </div>
+                    </div>
+
+                    <!-- Eliminar cuenta -->
+                    <div class="cuenta-seccion eliminar">
+                        <h3>Eliminar cuenta</h3>
+                        <p>Esta acción es irreversible. Todos tus datos se eliminarán permanentemente.</p>
+                        
+                        <button type="submit" id="btn-eliminar-cuenta" class="btn-carrito-eliminar">Eliminar cuenta</button>
+                    </div>
+                </section>
             </main>
 
             <footer class="footer">
@@ -68,8 +107,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/javascript/supabaseClient.js" defer></script>
-    <script src="/javascript/principal.js" defer></script>
+    <script src="/javascript/supabaseClient.js"></script>
+    <script src="/javascript/cuenta.js"></script>
+    <script src="/javascript/vista-contra.js"></script>
 </body>
 
 </html>
