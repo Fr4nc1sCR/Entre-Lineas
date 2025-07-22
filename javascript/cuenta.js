@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // Llamada a la función de Netlify
-        const response = await fetch("/.netlify/functions/eliminar-cuenta", {
+        const response = await fetch("/netlify/functions/eliminar-cuenta", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ user_id: user.id })
