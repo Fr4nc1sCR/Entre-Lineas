@@ -18,69 +18,73 @@
 
 /* Sidebar */
 .sidebar {
-    width: 260px;
-    background: var(--Fondo-tarjetas);
-    padding: 2rem 1.5rem;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  width: 260px;
+  background: var(--Fondo-tarjetas);
+  padding: 2rem 1.5rem;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .sidebar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
 .sidebar-header h2 {
-    font-size: 2rem;
+  font-size: 2rem;
+  margin-left: 1rem;
 }
 
 #sidebar-toggle {
-    font-size: 2.2rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--Titulos-Acentos);
-    transition: color 0.3s ease;
+  font-size: 2.2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--Titulos-Acentos);
+  transition: color 0.3s ease;
 }
 
 #sidebar-toggle:hover {
-    color: var(--Botones-Resaltes);
+  color: var(--Botones-Resaltes);
 }
 
 .sidebar-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-grow: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
 }
 
 .sidebar-nav li {
-    margin-bottom: 1.6rem;
+  margin-bottom: 1.6rem;
 }
 
 .sidebar-nav a,
 #logout-btn {
-    font-size: 1.5rem;
-    text-decoration: none;
-    color: var(--Titulos-Acentos);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.3rem 0;
-    width: 100%;
-    text-align: left;
-    transition: color 0.3s ease, background-color 0.3s ease;
-    border-radius: 0.5rem;
+  font-size: 1.4rem;
+  text-decoration: none;
+  color: var(--Titulos-Acentos);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.6rem 1rem;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .sidebar-nav a:hover,
 #logout-btn:hover {
-    color: var(--Botones-Resaltes);
-    background: var(--Detalles-sutiles);
+  color: var(--Botones-Resaltes);
+  background: var(--Detalles-sutiles);
 }
 
 /* Toggle modo movil menu */

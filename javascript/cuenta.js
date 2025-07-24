@@ -37,8 +37,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("nombre").value = user.user_metadata?.full_name || "";
     document.getElementById("email").value = user.email;
 
-    // G
-
     // Guardar cambios
     document.getElementById("form-perfil").addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -204,13 +202,32 @@ async function cargarPedidos(userId) {
         return;
     }
 
-    lista.innerHTML = pedidos.map(pedido => `
-    <div class="pedido">
-      <p><strong>ID:</strong> ${pedido.id}</p>
-      <p><strong>Fecha:</strong> ${new Date(pedido.fecha).toLocaleDateString()}</p>
-      <p><strong>Total:</strong> ₡${pedido.total?.toLocaleString() || '0'}</p>
-    </div>
-  `).join("");
+    // Obtener títulos de todos los libros de la base de datos
+    const { data: librosData, error: librosError } = await supabase
+        .from("libros")
+        .select("id, titulo");
+
+    if (librosError) {
+        console.error("Error al cargar los libros:", librosError);
+        return;
+    }
+
+    lista.innerHTML = pedidos.map(pedido => {
+        const libros = pedido.detalle.map(item => {
+            const libro = librosData.find(l => l.id === item.libro_id);
+            return libro ? libro.titulo : "Libro desconocido";
+        }).join(", ");
+
+        return `
+        <div class="pedido">
+            <p><strong>ID:</strong> ${pedido.id}</p>
+            <p><strong>Fecha:</strong> ${new Date(pedido.fecha).toLocaleString("es-CR")}</p>
+            <p><strong>Libros:</strong> ${libros}</p>
+            <p><strong>Estado:</strong> ${pedido.estado}</p>
+            <p><strong>Total:</strong> ₡${Number(pedido.total).toLocaleString("es-CR")}</p>
+        </div>
+        `;
+    }).join("");
 }
 
 async function actualizarContadorCarrito() {

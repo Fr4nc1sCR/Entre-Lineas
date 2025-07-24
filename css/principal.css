@@ -18,7 +18,7 @@
   width: 260px;
   background: var(--Fondo-tarjetas);
   padding: 2rem 1.5rem;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
   transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
@@ -33,6 +33,7 @@
 
 .sidebar-header h2 {
   font-size: 2rem;
+  margin-left: 1rem;
 }
 
 #sidebar-toggle {
@@ -61,17 +62,20 @@
 
 .sidebar-nav a,
 #logout-btn {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   text-decoration: none;
   color: var(--Titulos-Acentos);
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.3rem 0;
+  padding: 0.6rem 1rem;
   width: 100%;
   text-align: left;
-  transition: color 0.3s ease, background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
   border-radius: 0.5rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .sidebar-nav a:hover,
@@ -338,7 +342,7 @@ body.dark-theme,
 
 body.dark-theme .sidebar {
   background-color: #1E1E1E;
-  box-shadow: 2px 0 10px rgba(255, 255, 255, 0.1);
+  box-shadow: 2px 0 10px rgba(255, 255, 255, 0.4);
 }
 
 body.dark-theme .menu-btn,

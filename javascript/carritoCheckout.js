@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   paypal.Buttons({
     createOrder: (data, actions) => {
       const totalColones = parseFloat(document.getElementById("total-carrito").textContent);
-      const tipoCambio = 540; // Actualiza con el tipo de cambio real
+      const tipoCambio = 504.56; // Actualiza con el tipo de cambio real
       const totalUSD = totalColones / tipoCambio;
 
       if (totalUSD <= 0 || isNaN(totalUSD)) {
@@ -68,17 +68,70 @@ document.addEventListener("DOMContentLoaded", async () => {
       const order = await actions.order.capture();
 
       // Obtener carrito para guardar la compra
-      const { data: carrito, error } = await supabase
+      const { data: carrito, error: carritoError } = await supabase
         .from("carrito")
         .select("libro_id, cantidad")
         .eq("user_id", userId);
 
-      if (error) {
-        console.error("Error al obtener carrito:", error);
+      if (carritoError) {
+        console.error("Error al obtener carrito:", carritoError);
         return;
       }
 
-      // Insertar cada item en la tabla compras
+      if (!carrito || carrito.length === 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Carrito vacío',
+          text: 'No hay productos para registrar en el pedido.'
+        });
+        return;
+      }
+
+      // Calcular total de la compra
+      const { data: librosData, error: librosError } = await supabase
+        .from("libros")
+        .select("id, precio")
+        .in("id", carrito.map(item => item.libro_id));
+
+      if (librosError) {
+        console.error("Error al obtener precios de libros:", librosError);
+        return;
+      }
+
+      let total = 0;
+      const detalle = carrito.map(item => {
+        const libro = librosData.find(l => l.id === item.libro_id);
+        const precio = libro ? libro.precio : 0;
+        const subtotal = precio * item.cantidad;
+        total += subtotal;
+        return {
+          libro_id: item.libro_id,
+          cantidad: item.cantidad,
+          precio_unitario: precio,
+          subtotal
+        };
+      });
+
+      // Insertar pedido completo en la tabla pedidos
+      const { error: pedidoError } = await supabase.from("pedidos").insert([{
+        user_id: userId,
+        total,
+        estado: "Pagado", // o el estado que manejes
+        detalle: detalle, // guarda el arreglo JSON con detalle
+        fecha: new Date().toISOString()
+      }]);
+
+      if (pedidoError) {
+        console.error("Error al insertar pedido:", pedidoError);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo guardar el pedido.'
+        });
+        return;
+      }
+
+      // Opcional: también insertar en "compras" si quieres detalle individual para otras funcionalidades
       for (const item of carrito) {
         await supabase.from("compras").insert({
           user_id: userId,
@@ -97,9 +150,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         text: 'Tu compra se ha realizado correctamente.',
         customClass: { popup: 'swal-custom' }
       }).then(() => {
-        window.location.href = '/paginas/mis-libros.html';
+        window.location.href = '/paginas/principal.html';
       });
     },
+
     onCancel: () => {
       Swal.fire({
         icon: 'info',
