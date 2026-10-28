@@ -1,255 +1,248 @@
-// Principal.js
+// principal.js
+// Catálogo: carga de libros, búsqueda, orden, detalle y agregar al carrito.
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const supabase = window.supabase;
+let libros = [];
+let userId = null;
+let libroActual = null;
 
-  // Verificar sesión
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) {
-    window.location.href = '/index.html';
-    return;
-  }
+const grid = document.getElementById('libros-grid');
+const modal = document.getElementById('modal-libro');
 
-  // Mostrar nombre
-  const user = session.user;
-  const fullName = user.user_metadata?.full_name || user.email || "Lector";
-  document.getElementById("user-name").textContent = fullName;
+document.addEventListener('DOMContentLoaded', async () => {
+  const session = await iniciarApp();
+  if (!session) return;
 
-  // Mostrar contador de carrito al cargar
-  await actualizarContadorCarrito();
+  userId = session.user.id;
 
-  // Logout
-  const logoutBtn = document.getElementById("logout-btn");
-  logoutBtn.addEventListener("click", async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      alert("Error al cerrar sesión: " + error.message);
-    } else {
-      window.location.href = '/index.html';
-    }
+  const nombre = session.user.user_metadata?.full_name || '';
+  document.getElementById('saludo-nombre').textContent = nombre.split(' ')[0] || 'lector';
+
+  let espera;
+  document.getElementById('buscar').addEventListener('input', () => {
+    clearTimeout(espera);
+    espera = setTimeout(renderizarLibros, 150);
   });
+  document.getElementById('ordenar').addEventListener('change', renderizarLibros);
 
-  // Modo oscuro
-  const themeToggle = document.getElementById("theme-toggle");
-  if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark-theme");
-    themeToggle.checked = true;
-  }
-
-  themeToggle.addEventListener("change", () => {
-    document.body.classList.toggle("dark-theme");
-    localStorage.setItem("theme", document.body.classList.contains("dark-theme") ? "dark" : "light");
-  });
-
-  // Cargar libros desde Supabase
   await cargarLibros();
 });
 
 async function cargarLibros() {
-  const supabase = window.supabase;
-  const { data: libros, error } = await supabase
+  const { data, error } = await supabase
     .from('libros')
     .select('*')
     .order('titulo', { ascending: true });
 
-  const contenedor = document.getElementById("libros-grid");
-
   if (error) {
-    console.error("Error al cargar libros:", error.message);
-    contenedor.innerHTML = "<p>Error al cargar libros</p>";
+    console.error('Error al cargar libros:', error.message);
+    grid.innerHTML = estadoVacio('fa-triangle-exclamation', 'No pudimos cargar el catálogo', 'Revisa tu conexión e intenta de nuevo.');
     return;
   }
 
-  if (!libros || libros.length === 0) {
-    contenedor.innerHTML = "<p>No hay libros disponibles en este momento.</p>";
+  libros = data || [];
+  renderizarLibros();
+}
+
+function librosFiltrados() {
+  const texto = normalizar(document.getElementById('buscar').value);
+  const orden = document.getElementById('ordenar').value;
+
+  const resultado = libros.filter(libro =>
+    normalizar(libro.titulo).includes(texto) || normalizar(libro.autor).includes(texto)
+  );
+
+  const comparadores = {
+    'titulo': (a, b) => a.titulo.localeCompare(b.titulo, 'es'),
+    'autor': (a, b) => a.autor.localeCompare(b.autor, 'es'),
+    'precio-asc': (a, b) => a.precio - b.precio,
+    'precio-desc': (a, b) => b.precio - a.precio,
+    'fecha': (a, b) => (b.fecha_publicacion || '').localeCompare(a.fecha_publicacion || '')
+  };
+
+  return resultado.sort(comparadores[orden]);
+}
+
+// Ignora mayúsculas y tildes al buscar ("paramo" encuentra "Páramo")
+function normalizar(texto) {
+  return String(texto || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+}
+
+function renderizarLibros() {
+  const lista = librosFiltrados();
+  const conteo = document.getElementById('conteo-libros');
+
+  conteo.textContent = `${lista.length} ${lista.length === 1 ? 'título' : 'títulos'}`;
+
+  if (libros.length === 0) {
+    grid.innerHTML = estadoVacio('fa-book-open', 'El catálogo está vacío', 'Pronto agregaremos nuevos libros.');
     return;
   }
 
-  libros.forEach(libro => {
-    const tarjeta = document.createElement("article");
-    tarjeta.classList.add("libro-card");
+  if (lista.length === 0) {
+    grid.innerHTML = estadoVacio('fa-magnifying-glass', 'Sin resultados', 'Prueba con otro título o autor.');
+    return;
+  }
+
+  grid.innerHTML = '';
+
+  lista.forEach((libro, i) => {
+    const tarjeta = document.createElement('article');
+    tarjeta.className = 'libro-card';
+    tarjeta.tabIndex = 0;
+    tarjeta.setAttribute('role', 'button');
+    tarjeta.setAttribute('aria-label', `${libro.titulo}, de ${libro.autor}`);
+    tarjeta.style.animationDelay = `${Math.min(i, 12) * 40}ms`;
+
+    const agotado = libro.stock <= 0;
+    const etiqueta = agotado
+      ? '<span class="stock-tag agotado">Agotado</span>'
+      : (libro.stock <= 3 ? '<span class="stock-tag">Últimas unidades</span>' : '');
 
     tarjeta.innerHTML = `
-      <img src="${libro.portada_url || '/img/portada-generica.jpg'}" alt="${libro.titulo}" />
-      <div class="info">
-        <h4>${libro.titulo}</h4>
-        <p>${libro.autor}</p>
+      <div class="libro-cover">
+        ${etiqueta}
+        <img src="${escapeHTML(libro.portada_url || PORTADA_GENERICA)}" alt="Portada de ${escapeHTML(libro.titulo)}" loading="lazy" />
+      </div>
+      <div class="libro-info">
+        <h3>${escapeHTML(libro.titulo)}</h3>
+        <p class="autor">${escapeHTML(libro.autor)}</p>
+        <div class="libro-meta">
+          <span class="price">${formatearColones(libro.precio)}</span>
+          <button class="icon-btn btn-rapido" aria-label="Agregar ${escapeHTML(libro.titulo)} al carrito" ${agotado ? 'disabled' : ''}>
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
       </div>
     `;
 
-    tarjeta.addEventListener("click", () => {
-      document.getElementById("modal-portada").src = libro.portada_url || '/img/portada-generica.jpg';
-      document.getElementById("modal-titulo").textContent = libro.titulo;
-      document.getElementById("modal-autor").textContent = libro.autor;
-      document.getElementById("modal-editorial").textContent = libro.editorial || "Desconocida";
-      document.getElementById("modal-isbn").textContent = libro.isbn || "No disponible";
-      document.getElementById("modal-idioma").textContent = libro.idioma;
-      document.getElementById("modal-fecha").textContent = libro.fecha_publicacion || "No disponible";
-      document.getElementById("modal-descripcion").textContent = libro.descripcion || "Sin descripción";
-      document.getElementById("modal-precio").textContent = libro.precio.toFixed(2);
-      document.getElementById("modal-stock").textContent = libro.stock;
+    // Si la imagen no carga, se usa la portada genérica
+    tarjeta.querySelector('img').addEventListener('error', (e) => {
+      e.target.src = PORTADA_GENERICA;
+    }, { once: true });
 
-      document.getElementById("modal-libro").style.display = "block";
-      document.body.classList.add("no-scroll");
-
-      const botonCarrito = document.getElementById("btn-agregar-carrito");
-      botonCarrito.dataset.libroId = libro.id; // esto agrega el ID real
+    tarjeta.addEventListener('click', () => abrirModal(libro));
+    tarjeta.addEventListener('keydown', (e) => {
+      if (e.target === tarjeta && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        abrirModal(libro);
+      }
     });
 
-    contenedor.appendChild(tarjeta);
-  });
+    tarjeta.querySelector('.btn-rapido').addEventListener('click', (e) => {
+      e.stopPropagation();
+      agregarAlCarrito(libro, e.currentTarget);
+    });
 
-  aplicarEfectoHover();
+    aplicarEfectoHover(tarjeta);
+    grid.appendChild(tarjeta);
+  });
 }
 
-async function actualizarContadorCarrito() {
-  const supabase = window.supabase;
-  const contador = document.getElementById("contador-carrito");
+function estadoVacio(icono, titulo, texto) {
+  return `
+    <div class="vacio">
+      <span class="vacio-icono"><i class="fa-solid ${icono}"></i></span>
+      <h3>${titulo}</h3>
+      <p>${texto}</p>
+    </div>
+  `;
+}
+
+// Inclina la portada siguiendo el cursor (solo en dispositivos con mouse)
+function aplicarEfectoHover(tarjeta) {
+  if (!window.matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches) return;
+
+  const portada = tarjeta.querySelector('.libro-cover');
+
+  portada.addEventListener('mousemove', (e) => {
+    const rect = portada.getBoundingClientRect();
+    const rotateX = ((e.clientY - rect.top) / rect.height - 0.5) * -10;
+    const rotateY = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
+    portada.style.transform = `perspective(700px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+  });
+
+  portada.addEventListener('mouseleave', () => {
+    portada.style.transform = '';
+  });
+}
+
+// ---------- Detalle del libro ----------
+
+function abrirModal(libro) {
+  libroActual = libro;
+
+  const portada = document.getElementById('modal-portada');
+  portada.src = libro.portada_url || PORTADA_GENERICA;
+  portada.alt = `Portada de ${libro.titulo}`;
+
+  document.getElementById('modal-titulo').textContent = libro.titulo;
+  document.getElementById('modal-autor').textContent = libro.autor;
+  document.getElementById('modal-descripcion').textContent = libro.descripcion || 'Sin descripción.';
+  document.getElementById('modal-editorial').textContent = libro.editorial || 'Desconocida';
+  document.getElementById('modal-fecha').textContent = libro.fecha_publicacion?.slice(0, 4) || 'No disponible';
+  document.getElementById('modal-idioma').textContent = libro.idioma || 'No disponible';
+  document.getElementById('modal-isbn').textContent = libro.isbn || 'No disponible';
+  document.getElementById('modal-stock').textContent = libro.stock > 0 ? `${libro.stock} unidades` : 'Agotado';
+  document.getElementById('modal-precio').textContent = formatearColones(libro.precio);
+
+  document.getElementById('btn-agregar-carrito').disabled = libro.stock <= 0;
+
+  modal.showModal();
+}
+
+document.getElementById('cerrar-modal').addEventListener('click', () => modal.close());
+
+// Cerrar al hacer clic fuera del contenido
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) modal.close();
+});
+
+document.getElementById('btn-agregar-carrito').addEventListener('click', async (e) => {
+  const agregado = await agregarAlCarrito(libroActual, e.currentTarget);
+  if (agregado) modal.close();
+});
+
+// ---------- Carrito ----------
+
+async function agregarAlCarrito(libro, boton) {
+  setCargando(boton, true);
 
   try {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      contador.textContent = "0";
-      return;
-    }
-
-    const userId = session.user.id;
-
-    // Obtener todos los libros en el carrito del usuario
-    const { data: carrito, error } = await supabase
-      .from("carrito")
-      .select("cantidad")
-      .eq("user_id", userId);
-
-    if (error) {
-      console.error("Error al obtener el carrito:", error.message);
-      contador.textContent = "0";
-      return;
-    }
-
-    // Sumar cantidades de todos los libros
-    const total = carrito.reduce((sum, item) => sum + (item.cantidad || 0), 0);
-    contador.textContent = total;
-  } catch (err) {
-    console.error("Error general al contar el carrito:", err.message);
-    document.getElementById("contador-carrito").textContent = "0";
-  }
-}
-
-function aplicarEfectoHover() {
-  const cards = document.querySelectorAll(".libro-card");
-
-  cards.forEach((card) => {
-    card.addEventListener("mousemove", (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const rotateX = (y - rect.height / 2) / -20;
-      const rotateY = (x - rect.width / 2) / 20;
-      card.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-
-    card.addEventListener("mouseleave", () => {
-      card.style.transform = "perspective(600px) rotateX(0deg) rotateY(0deg)";
-    });
-  });
-}
-
-// Botón para cerrar el modal
-document.getElementById("cerrar-modal").addEventListener("click", () => {
-  document.getElementById("modal-libro").style.display = "none";
-  document.body.classList.remove("no-scroll");
-});
-
-// Cerrar modal al hacer clic fuera del contenido
-const modal = document.getElementById("modal-libro");
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) {
-    modal.style.display = "none";
-    document.body.classList.remove("no-scroll");
-  }
-});
-
-// Botón "Agregar al carrito" en el modal
-document.addEventListener("click", async (e) => {
-  if (e.target.id === "btn-agregar-carrito") {
-    const supabase = window.supabase;
-    const { data: { session } } = await supabase.auth.getSession();
-    const userId = session.user.id;
-
-    const libroId = e.target.dataset.libroId;
-
     // Verificar si el libro ya está en el carrito
     const { data: existente, error: fetchError } = await supabase
-      .from("carrito")
-      .select("*")
-      .eq("user_id", userId)
-      .eq("libro_id", libroId)
-      .single();
+      .from('carrito')
+      .select('id, cantidad')
+      .eq('user_id', userId)
+      .eq('libro_id', libro.id)
+      .maybeSingle();
 
-    if (fetchError && fetchError.code !== "PGRST116") {
-      console.error("Error al consultar el carrito:", fetchError.message);
-      return;
+    if (fetchError) throw fetchError;
+
+    const cantidadNueva = (existente?.cantidad || 0) + 1;
+
+    if (cantidadNueva > libro.stock) {
+      Alerta.fire({
+        icon: 'info',
+        title: 'Sin más unidades',
+        text: `Ya tienes en tu carrito todas las unidades disponibles de "${libro.titulo}".`
+      });
+      return false;
     }
 
-    if (existente) {
-      // Ya existe: actualizar cantidad
-      const { error: updateError } = await supabase
-        .from("carrito")
-        .update({ cantidad: existente.cantidad + 1 })
-        .eq("id", existente.id);
+    const { error } = existente
+      ? await supabase.from('carrito').update({ cantidad: cantidadNueva }).eq('id', existente.id)
+      : await supabase.from('carrito').insert({ user_id: userId, libro_id: libro.id, cantidad: 1 });
 
-      if (updateError) {
-        console.error("Error al actualizar carrito:", updateError.message);
-        return;
-      }
-    } else {
-      // No existe: agregar nuevo
-      const { error: insertError } = await supabase
-        .from("carrito")
-        .insert({
-          user_id: userId,
-          libro_id: libroId,
-          cantidad: 1
-        });
+    if (error) throw error;
 
-      if (insertError) {
-        console.error("Error al insertar en carrito:", insertError.message);
-        return;
-      }
-    }
-
-    // Mostrar alerta de éxito
-    Swal.fire({
-      icon: 'success',
-      title: '¡Agregado!',
-      text: 'El libro fue agregado al carrito.',
-      confirmButtonText: 'Aceptar',
-      customClass: {
-        popup: 'swal-custom'
-      }
-    });
-
-    document.getElementById("modal-libro").style.display = "none";
-    document.body.classList.remove("no-scroll");
-
-    // Actualiza el contador del carrito
-    await actualizarContadorCarrito();
+    Toast.fire({ icon: 'success', title: `"${libro.titulo}" se agregó al carrito` });
+    await actualizarContadorCarrito(userId);
+    return true;
+  } catch (err) {
+    console.error('Error al agregar al carrito:', err.message);
+    Alerta.fire({ icon: 'error', title: 'No se pudo agregar', text: 'Intenta de nuevo en un momento.' });
+    return false;
+  } finally {
+    setCargando(boton, false);
   }
-});
-
-/* Abrir el menu modo movil */
-
-document.getElementById("abrir-menu").addEventListener("click", () => {
-  document.getElementById("sidebar").classList.add("open");
-});
-
-// También puedes cerrarlo al hacer clic fuera del sidebar (opcional)
-document.addEventListener("click", (e) => {
-  const sidebar = document.getElementById("sidebar");
-  const abrirBtn = document.getElementById("abrir-menu");
-
-  if (!sidebar.contains(e.target) && !abrirBtn.contains(e.target)) {
-    sidebar.classList.remove("open");
-  }
-});
+}

@@ -4,79 +4,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Restablecer contraseña - Entre Líneas</title>
-  <link rel="stylesheet" href="/css/styles.css"/>
-  <link rel="stylesheet" href="/css/cambiar-contrasena.css">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Open+Sans&display=swap"
-    rel="stylesheet" />
+  <title>Restablecer contraseña · Entre Líneas</title>
+  <link rel="icon" href="/img/books.png">
+  <script src="/javascript/tema.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/auth.css">
 </head>
 
 <body>
-  <main class="login-container">
-    <section class="login-box">
-      <h1><img src="/img/books.png" alt="Icono libro" class="icono-libro">Restablecer contraseña</h1>
-      <p id="form-title">Ingresa tu nueva contraseña</p>
+  <button class="icon-btn theme-float" id="theme-toggle" aria-label="Cambiar tema claro / oscuro">
+    <i class="fa-solid fa-moon icono-luna"></i>
+    <i class="fa-solid fa-sun icono-sol"></i>
+  </button>
 
-      <form id="reset-password-form" class="formulario">
-        <div class="input-group">
-          <label for="new-password">Nueva contraseña</label>
-          <input type="password" id="new-password" required />
-          <span class="toggle-password" toggle="#new-password" aria-label="Mostrar contraseña" role="button"
-            tabindex="0">
-            <!-- Ojo abierto -->
-            <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#555"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
-            <!-- Ojo tachado -->
-            <svg class="eye-closed" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#555"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-              <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.35 21.35 0 0 1 5-6" />
-              <path d="M1 1l22 22" />
-            </svg>
-          </span>
-        </div>
-        <div class="input-group">
-          <label for="confirm-password">Confirmar contraseña</label>
-          <input type="password" id="confirm-password" required />
-          <span class="toggle-password" toggle="#confirm-password" aria-label="Mostrar contraseña" role="button"
-            tabindex="0">
-            <!-- Ojo abierto -->
-            <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#555"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
-            <!-- Ojo tachado -->
-            <svg class="eye-closed" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#555"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-              <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.35 21.35 0 0 1 5-6" />
-              <path d="M1 1l22 22" />
-            </svg>
-          </span>
-        </div>
-        <button type="submit" class="btn-login">Actualizar contraseña</button>
-      </form>
+  <main class="auth">
+    <aside class="auth-visual">
+      <a class="brand" href="/index.html">
+        <img src="/img/books.png" alt="">
+        <span>Entre Líneas</span>
+      </a>
 
-      <div class="footer" style="margin-top:2rem;">
-        <p>&copy; 2025 Julián Quesada Víquez. Todos los derechos reservados.</p>
+      <div class="auth-copy">
+        <h2>Un nuevo <em>capítulo</em> para tu cuenta.</h2>
+        <p>Elige una contraseña segura y vuelve a tus lecturas en un momento.</p>
       </div>
+    </aside>
+
+    <section class="auth-panel">
+      <div class="auth-card">
+        <a class="brand" href="/index.html">
+          <img src="/img/books.png" alt="">
+          <span>Entre Líneas</span>
+        </a>
+
+        <h1>Nueva contraseña</h1>
+        <p class="subtitulo">Escribe tu nueva contraseña dos veces para confirmarla.</p>
+
+        <form id="reset-password-form" class="form auth-form" style="margin-top: 1.75rem;" novalidate>
+          <div class="field">
+            <label for="new-password">Nueva contraseña</label>
+            <div class="input-wrap">
+              <input class="input" type="password" id="new-password" autocomplete="new-password" data-requisitos="#requisitos-reset" required />
+              <button type="button" class="toggle-password" data-target="#new-password" aria-label="Mostrar contraseña"></button>
+            </div>
+            <ul class="requisitos" id="requisitos-reset">
+              <li data-req="largo">12 caracteres o más</li>
+              <li data-req="mayuscula">Una mayúscula</li>
+              <li data-req="minuscula">Una minúscula</li>
+              <li data-req="numero">Un número</li>
+              <li data-req="simbolo">Un símbolo</li>
+            </ul>
+          </div>
+          <div class="field">
+            <label for="confirm-password">Confirmar contraseña</label>
+            <div class="input-wrap">
+              <input class="input" type="password" id="confirm-password" autocomplete="new-password" required />
+              <button type="button" class="toggle-password" data-target="#confirm-password" aria-label="Mostrar contraseña"></button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Actualizar contraseña</button>
+          <p class="volver"><a href="/index.html">Volver a iniciar sesión</a></p>
+        </form>
+      </div>
+
+      <p class="auth-footer">&copy; 2025 Julián Quesada Víquez. Todos los derechos reservados.</p>
     </section>
   </main>
 
-  <div class="background-books"></div>
-
-  <!-- Librerías -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/javascript/supabaseClient.js"></script>
-
-  <!-- Script de restablecimiento -->
-  <script src="/javascript/recuperar.js"></script>
-  
-  <!-- Script de toggle password -->
+  <script src="/javascript/ui.js"></script>
   <script src="/javascript/vista-contra.js"></script>
+  <script src="/javascript/recuperar.js"></script>
 </body>
 
 </html>

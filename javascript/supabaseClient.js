@@ -5,4 +5,8 @@
 const supabaseUrl = 'https://egashjhrkdcfsjhynrpo.supabase.co'; // CORREGIDO: dominio válido
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnYXNoamhya2RjZnNqaHlucnBvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMzc4NDksImV4cCI6MjEwODcxMzg0OX0.y8q2yQKnkQ0LurRDwuujKcmo4RygePNu5qXgzdnFw5o';
 
+// URL pública del sitio: a dónde regresan los enlaces de los correos (confirmar cuenta / restablecer contraseña).
+// Debe estar en Supabase > Authentication > URL Configuration > Redirect URLs.
+const SITE_URL = 'https://entrelineaslib.netlify.app';
+
 window.supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);

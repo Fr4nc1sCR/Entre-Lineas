@@ -4,103 +4,140 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bienvenido a Entre Líneas</title>
-    <link rel="stylesheet" href="/css/styles.css" />
-    <link rel="stylesheet" href="/css/principal.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display&display=swap" rel="stylesheet" />
+    <title>Catálogo · Entre Líneas</title>
+    <link rel="icon" href="/img/books.png">
+    <script src="/javascript/tema.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/app.css" />
 </head>
 
 <body>
-    <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2>Menu Principal</h2>
-            </div>
+    <header class="topbar">
+        <div class="topbar-inner container">
+            <a class="brand" href="/paginas/principal.html">
+                <img src="/img/books.png" alt="">
+                <span>Entre Líneas</span>
+            </a>
 
-            <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="#"><i class="fas fa-home"></i> Inicio</a></li>
-                    <li><a href="/paginas/cuenta.html"><i class="fas fa-user"></i> Cuenta</a></li>
-                    <li><button id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</button></li>
-                </ul>
+            <nav class="nav" aria-label="Principal">
+                <a href="/paginas/principal.html" aria-current="page">Catálogo</a>
+                <a href="/paginas/cuenta.html">Mi cuenta</a>
             </nav>
 
-            <div class="theme-toggle-container">
-                <span class="theme-label">Modo oscuro</span>
-                <label class="switch">
-                    <input type="checkbox" id="theme-toggle" aria-label="Cambiar tema claro / oscuro" />
-                    <span class="slider"></span>
-                </label>
-            </div>
-        </aside>
-
-        <!-- Main content -->
-        <div class="main-wrapper">
-            <header class="header">
-                <div class="logo">
-                    <img src="/img/books.png" alt="Logo Entre Líneas" />
-                    <h1>Entre Líneas</h1>
-                </div>
-                <div class="user-greeting" id="user-greeting">
-                    Hola, <strong id="user-name"></strong> 👋
-                </div>
-                <div class="carrito-icono">
-                    <a href="/paginas/carrito.html" id="link-carrito" title="Ver carrito">
-                        <img src="/img/shopping-bag.png" alt="Carrito de compras" class="icono-carrito" />
-                        <span id="contador-carrito">0</span>
-                    </a>
-                </div>
-                <div class="menu-movil">
-                    <button id="abrir-menu" class="menu-btn" aria-label="Abrir menú">☰</button>
-                </div>
-            </header>
-
-            <main class="main-content">
-                <section class="bienvenida">
-                    <h2>¡Bienvenido de vuelta!</h2>
-                    <p>Explora nuestra colección y sumérgete entre líneas.</p>
-                </section>
-
-                <section class="destacados">
-                    <h3>Libros Recomendados</h3>
-                    <div class="libros-grid" id="libros-grid">
+            <div class="topbar-actions">
+                <button class="icon-btn" id="theme-toggle" aria-label="Cambiar tema claro / oscuro">
+                    <i class="fa-solid fa-moon icono-luna"></i>
+                    <i class="fa-solid fa-sun icono-sol"></i>
+                </button>
+                <a href="/paginas/carrito.html" class="icon-btn" aria-label="Ver carrito">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="badge" id="contador-carrito" hidden>0</span>
+                </a>
+                <div class="user-menu">
+                    <button class="avatar" id="user-menu-btn" aria-haspopup="menu" aria-expanded="false" aria-label="Menú de usuario">
+                        <span id="user-initials">·</span>
+                    </button>
+                    <div class="menu" id="user-menu" role="menu" hidden>
+                        <div class="menu-header">
+                            <strong id="user-name"></strong>
+                            <span id="user-email"></span>
+                        </div>
+                        <a href="/paginas/principal.html" role="menuitem"><i class="fa-solid fa-book-open"></i> Catálogo</a>
+                        <a href="/paginas/cuenta.html" role="menuitem"><i class="fa-regular fa-user"></i> Mi cuenta</a>
+                        <a href="/paginas/carrito.html" role="menuitem"><i class="fa-solid fa-bag-shopping"></i> Carrito</a>
+                        <button id="logout-btn" class="menu-salir" role="menuitem"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</button>
                     </div>
-                </section>
-            </main>
-
-            <footer class="footer">
-                <p>&copy; 2025 Entre Líneas. Todos los derechos reservados.</p>
-            </footer>
-        </div>
-    </div>
-
-    <!-- Modal Preview -->
-    <div id="modal-libro" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" id="cerrar-modal">&times;</span>
-            <img id="modal-portada" src="" alt="Portada del libro" />
-            <h2 id="modal-titulo" class="modal-titulo"></h2>
-            <p><strong>Autor:</strong> <span id="modal-autor"></span></p>
-            <p><strong>Editorial:</strong> <span id="modal-editorial"></span></p>
-            <p><strong>ISBN:</strong> <span id="modal-isbn"></span></p>
-            <p><strong>Idioma:</strong> <span id="modal-idioma"></span></p>
-            <p><strong>Publicado:</strong> <span id="modal-fecha"></span></p>
-            <p><strong>Descripción:</strong></p>
-            <p id="modal-descripcion"></p>
-            <p><strong>Precio:</strong> ₡<span id="modal-precio"></span></p>
-            <p><strong>Stock disponible:</strong> <span id="modal-stock"></span></p>
-            <div style="text-align: center; margin-top: 2rem;">
-                <button id="btn-agregar-carrito" class="btn-carrito" data-libro-id="">Agregar al carrito</button>
+                </div>
             </div>
         </div>
-    </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <div>
+                <p class="eyebrow">Hola, <span id="saludo-nombre">lector</span></p>
+                <h1>Encuentra tu próxima<br><em>gran lectura</em>.</h1>
+                <p class="muted">Explora nuestra colección y sumérgete entre líneas.</p>
+            </div>
+
+            <div class="toolbar">
+                <div class="input-wrap has-icon">
+                    <i class="fa-solid fa-magnifying-glass input-icon"></i>
+                    <label for="buscar" class="sr-only">Buscar libros</label>
+                    <input class="input" type="search" id="buscar" placeholder="Buscar por título o autor…" autocomplete="off">
+                </div>
+                <label for="ordenar" class="sr-only">Ordenar por</label>
+                <select class="select" id="ordenar">
+                    <option value="titulo">Título (A–Z)</option>
+                    <option value="autor">Autor (A–Z)</option>
+                    <option value="precio-asc">Precio: menor a mayor</option>
+                    <option value="precio-desc">Precio: mayor a menor</option>
+                    <option value="fecha">Publicación más reciente</option>
+                </select>
+            </div>
+        </section>
+
+        <section aria-labelledby="titulo-catalogo">
+            <div class="section-head">
+                <h2 id="titulo-catalogo">Catálogo</h2>
+                <span class="muted" id="conteo-libros"></span>
+            </div>
+
+            <div class="libros-grid" id="libros-grid" aria-live="polite">
+                <!-- Esqueletos mientras cargan los libros -->
+                <div><div class="skeleton skeleton-cover"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line corta"></div></div>
+                <div><div class="skeleton skeleton-cover"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line corta"></div></div>
+                <div><div class="skeleton skeleton-cover"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line corta"></div></div>
+                <div><div class="skeleton skeleton-cover"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line corta"></div></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer container">
+        <p>&copy; 2025 Entre Líneas. Todos los derechos reservados.</p>
+        <p>Diseñado y desarrollado por Julián Quesada Víquez</p>
+    </footer>
+
+    <!-- Detalle del libro -->
+    <dialog id="modal-libro" class="book-dialog" aria-labelledby="modal-titulo">
+        <button class="icon-btn dialog-cerrar" id="cerrar-modal" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+        <div class="book-dialog-grid">
+            <div class="book-dialog-cover">
+                <img id="modal-portada" src="" alt="" />
+            </div>
+            <div class="book-dialog-body">
+                <div>
+                    <p class="eyebrow" id="modal-autor"></p>
+                    <h2 id="modal-titulo" style="margin-top: .5rem;"></h2>
+                </div>
+                <p class="descripcion" id="modal-descripcion"></p>
+                <dl class="specs">
+                    <div><dt>Editorial</dt><dd id="modal-editorial"></dd></div>
+                    <div><dt>Publicado</dt><dd id="modal-fecha"></dd></div>
+                    <div><dt>Idioma</dt><dd id="modal-idioma"></dd></div>
+                    <div><dt>ISBN</dt><dd id="modal-isbn"></dd></div>
+                    <div><dt>Disponibles</dt><dd id="modal-stock"></dd></div>
+                </dl>
+                <div class="buy-row">
+                    <span class="price" id="modal-precio"></span>
+                    <button id="btn-agregar-carrito" class="btn btn-primary">
+                        <i class="fa-solid fa-bag-shopping"></i> Agregar al carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </dialog>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/javascript/supabaseClient.js" defer></script>
-    <script src="/javascript/principal.js" defer></script>
+    <script src="/javascript/supabaseClient.js"></script>
+    <script src="/javascript/ui.js"></script>
+    <script src="/javascript/app.js"></script>
+    <script src="/javascript/principal.js"></script>
 </body>
 
 </html>

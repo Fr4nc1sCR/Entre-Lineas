@@ -4,37 +4,99 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Carrito - Entre Líneas</title>
+  <title>Carrito · Entre Líneas</title>
+  <link rel="icon" href="/img/books.png">
+  <script src="/javascript/tema.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="/css/styles.css" />
-  <link rel="stylesheet" href="/css/carrito.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="..." crossorigin="anonymous" />
+  <link rel="stylesheet" href="/css/app.css" />
 </head>
 
 <body>
-  <div class="carrito-container">
-    <h1>🛒 Tu Carrito</h1>
+  <header class="topbar">
+    <div class="topbar-inner container">
+      <a class="brand" href="/paginas/principal.html">
+        <img src="/img/books.png" alt="">
+        <span>Entre Líneas</span>
+      </a>
 
-    <div id="carrito-lista" class="carrito-lista">
-      <!-- Los ítems del carrito se agregan aquí dinámicamente -->
-    </div>
+      <nav class="nav" aria-label="Principal">
+        <a href="/paginas/principal.html">Catálogo</a>
+        <a href="/paginas/cuenta.html">Mi cuenta</a>
+      </nav>
 
-    <div class="resumen-carrito">
-      <div class="botones-carrito">
-        <button id="btn-volver" class="btn-volver">Seguir comprando</button>
-        <button id="btn-vaciar" class="btn-vaciar">Vaciar carrito</button>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="theme-toggle" aria-label="Cambiar tema claro / oscuro">
+          <i class="fa-solid fa-moon icono-luna"></i>
+          <i class="fa-solid fa-sun icono-sol"></i>
+        </button>
+        <a href="/paginas/carrito.html" class="icon-btn" aria-label="Ver carrito" aria-current="page">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="badge" id="contador-carrito" hidden>0</span>
+        </a>
+        <div class="user-menu">
+          <button class="avatar" id="user-menu-btn" aria-haspopup="menu" aria-expanded="false" aria-label="Menú de usuario">
+            <span id="user-initials">·</span>
+          </button>
+          <div class="menu" id="user-menu" role="menu" hidden>
+            <div class="menu-header">
+              <strong id="user-name"></strong>
+              <span id="user-email"></span>
+            </div>
+            <a href="/paginas/principal.html" role="menuitem"><i class="fa-solid fa-book-open"></i> Catálogo</a>
+            <a href="/paginas/cuenta.html" role="menuitem"><i class="fa-regular fa-user"></i> Mi cuenta</a>
+            <a href="/paginas/carrito.html" role="menuitem"><i class="fa-solid fa-bag-shopping"></i> Carrito</a>
+            <button id="logout-btn" class="menu-salir" role="menuitem"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</button>
+          </div>
+        </div>
       </div>
-      <p style="margin-top: 2rem;">Total a pagar: ₡<span id="total-carrito">0</span></p>
-      <p id="monto-usd" style="margin-top: 10px; font-weight: bold;"></p>
-      <div id="paypal-button-container" class="paypal-button-container"></div>
     </div>
-  </div>
+  </header>
+
+  <main class="container">
+    <div class="page-head">
+      <a href="/paginas/principal.html" class="volver-link"><i class="fa-solid fa-arrow-left"></i> Seguir comprando</a>
+      <h1>Tu carrito</h1>
+      <p class="muted" id="carrito-subtitulo">Cargando…</p>
+    </div>
+
+    <div class="cart-layout" id="cart-layout">
+      <section id="carrito-lista" class="cart-list" aria-live="polite">
+        <div class="card skeleton" style="height: 140px;"></div>
+        <div class="card skeleton" style="height: 140px;"></div>
+      </section>
+
+      <aside class="summary card" id="resumen" hidden>
+        <h2>Resumen del pedido</h2>
+        <dl>
+          <div><dt>Subtotal (<span id="cantidad-articulos">0</span>)</dt><dd id="subtotal-carrito">₡0</dd></div>
+          <div><dt>Envío</dt><dd class="gratis">Gratis</dd></div>
+          <div class="total"><dt>Total</dt><dd id="total-carrito">₡0</dd></div>
+        </dl>
+        <p class="usd" id="monto-usd"></p>
+        <div id="paypal-button-container" class="paypal-button-container"></div>
+        <p class="seguro"><i class="fa-solid fa-lock"></i> Pago seguro procesado por PayPal</p>
+        <button id="btn-vaciar" class="btn btn-ghost btn-block btn-sm">
+          <i class="fa-regular fa-trash-can"></i> Vaciar carrito
+        </button>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer container">
+    <p>&copy; 2025 Entre Líneas. Todos los derechos reservados.</p>
+    <p>Diseñado y desarrollado por Julián Quesada Víquez</p>
+  </footer>
 
   <script src="https://www.paypal.com/sdk/js?client-id=AbU5fOSyUJ1m7kyj5lFaa_rD0o8C0pHtZltOmx93Qoq5N4cUjnxPuwLyHJaP4Rc-YTjQALnSMo-sq9Ak&currency=USD"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/javascript/supabaseClient.js"></script>
+  <script src="/javascript/ui.js"></script>
+  <script src="/javascript/app.js"></script>
   <script src="/javascript/carritoCheckout.js"></script>
 </body>
 
