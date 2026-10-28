@@ -14,14 +14,26 @@ export async function handler(event) {
     };
   }
 
-  const { user_id } = JSON.parse(event.body || '{}');
+  // Obtener el usuario a partir de su token de sesión (no se confía en un ID enviado por el cliente)
+  const token = (event.headers.authorization || '').replace('Bearer ', '');
 
-  if (!user_id) {
+  if (!token) {
     return {
-      statusCode: 400,
-      body: JSON.stringify({ error: 'ID de usuario no proporcionado' }),
+      statusCode: 401,
+      body: JSON.stringify({ error: 'Sesión no proporcionada' }),
     };
   }
+
+  const { data: userData, error: userError } = await supabase.auth.getUser(token);
+
+  if (userError || !userData?.user) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ error: 'Sesión inválida o expirada' }),
+    };
+  }
+
+  const user_id = userData.user.id;
 
   try {
     // Eliminar pedidos

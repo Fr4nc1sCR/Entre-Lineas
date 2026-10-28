@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const { error: dbError } = await supabase
             .from("users")
             .update({
+                full_name: nuevoNombre,
                 username: nuevoUsername,
                 updated_at: new Date().toISOString()
             })
@@ -123,11 +124,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        // Llamada a la función de Netlify
+        // Llamada a la función de Netlify (el token prueba que el usuario es quien dice ser)
         const response = await fetch("/.netlify/functions/eliminar-cuenta", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ user_id: user.id })
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${session.access_token}`
+            }
         });
 
         const result = await response.json();

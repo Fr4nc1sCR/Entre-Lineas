@@ -59,12 +59,35 @@ async function register(full_name, username, email, password, confirmPassword) {
   }
 
   try {
-    // Paso 1: Crear usuario en Supabase Auth
+    // Paso 1: Verificar que el username no esté en uso
+    const { data: disponible, error: rpcError } = await supabase.rpc('username_disponible', {
+      p_username: username
+    });
+
+    if (rpcError) {
+      console.error('Error verificando username:', rpcError);
+    }
+
+    if (disponible === false) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al registrarse',
+        text: 'Ya existe un usuario con este username, cámbialo para continuar',
+        customClass: {
+          popup: 'swal-custom'
+        }
+      });
+
+      return;
+    }
+
+    // Paso 2: Crear usuario en Supabase Auth
+    // (el trigger handle_new_user de la base de datos crea su fila en la tabla users)
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { full_name }, // Se guarda en user_metadata
+        data: { full_name, username }, // Se guarda en user_metadata
         emailRedirectTo: `https://entrelineaslib.netlify.app/index.html?confirmed=true`
       }
     });
@@ -75,6 +98,8 @@ async function register(full_name, username, email, password, confirmPassword) {
 
       if (mensaje.includes(`Password should be at least 12 characters. Password should contain at least one character of each: abcdefghijklmnopqrstuvwxyz, ABCDEFGHIJKLMNOPQRSTUVWXYZ, 0123456789, !@#$%^&*()_+-=[]{};':"|<>?,./\`~.`)) {
         mensaje = 'La contraseña debe tener al menos 12 caracteres y contener letras mayúsculas, minúsculas, números y símbolos.';
+      } else if (mensaje.includes('Database error saving new user')) {
+        mensaje = 'No se pudo guardar el usuario. Verifica que el username y el correo no estén en uso.';
       }
 
 
@@ -90,53 +115,18 @@ async function register(full_name, username, email, password, confirmPassword) {
       return;
     }
 
-    const userId = data.user.id;
-
-    // Paso 2: Verificar si ya existe el usuario en la tabla users
-    const { data: existingUser, error: existError } = await supabase
-      .from('users')
-      .select('id')
-      .eq('id', userId)
-      .single();
-
-    if (existError && !existingUser) {
-      console.error('Error buscando usuario en tabla users:', existError);
-    }
-
-    if (!existingUser) {
-      // Paso 3: Insertar en tabla users sólo si no existe
-      const { error: insertError } = await supabase.from('users').insert({
-        id: userId,
-        full_name,
-        username,
-        email,
-        password_hash: "auth",
-        role: 2
+    // Paso 3: Si el correo ya estaba registrado, Supabase devuelve un usuario sin identidades
+    if (data.user && data.user.identities?.length === 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al registrarse',
+        text: 'Ya existe un usuario con este correo registrado, cámbialo para continuar',
+        customClass: {
+          popup: 'swal-custom'
+        }
       });
 
-      if (insertError) {
-
-        let mensaje = insertError.message;
-
-        if (mensaje.includes('duplicate key value violates unique constraint "users_username_key"')) {
-          mensaje = 'Ya existe un usuario con este username, cámbialo para continuar';
-        } else if (mensaje.includes('duplicate key value violates unique constraint "users_email_key"')) {
-          mensaje = 'Ya existe un usuario con este correo registrado, cámbialo para continuar';
-        }
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Error al guardar en la base de datos',
-          text: mensaje,
-          customClass: {
-            popup: 'swal-custom'
-          }
-        });
-
-        return;
-      }
-    } else {
-      console.log('Usuario ya existe en la tabla users, no se inserta de nuevo.');
+      return;
     }
 
     Swal.fire({

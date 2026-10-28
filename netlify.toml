@@ -1,2 +1,6 @@
 [functions]
   directory = ".netlify/functions"
+
+# Mantiene activa la base de datos de Supabase (evita que se pause por inactividad)
+[functions."keep-alive"]
+  schedule = "@daily"
